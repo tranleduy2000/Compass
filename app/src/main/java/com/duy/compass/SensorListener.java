@@ -6,7 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 /**
  * Created by Duy on 10/15/2017.
@@ -25,6 +24,8 @@ public class SensorListener implements SensorEventListener {
     private OnValueChangedListener mOnValueChangedListener;
     private int mIntervalTime = 0;
     private long mLastTime = 0;
+    private float[] R = new float[9];
+    private float[] I = new float[9];
 
     public SensorListener(Context context) {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -33,8 +34,8 @@ public class SensorListener implements SensorEventListener {
     }
 
     public void start() {
-        mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_UI);
-        mSensorManager.registerListener(this, mMagneticSensor, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mMagneticSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     public void stop() {
@@ -42,7 +43,7 @@ public class SensorListener implements SensorEventListener {
     }
 
     private void onChangeValue() {
-        Log.d(TAG, "will set rotation from " + mCurrentAzimuth + " to " + mAzimuth);
+//        Log.d(TAG, "will set rotation from " + mCurrentAzimuth + " to " + mAzimuth);
         if (mOnValueChangedListener != null) {
             mOnValueChangedListener.onCompassChangeValue(mCurrentAzimuth, mAzimuth);
         }
@@ -86,8 +87,7 @@ public class SensorListener implements SensorEventListener {
 
                 }
 
-                float R[] = new float[9];
-                float I[] = new float[9];
+
                 boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
                 if (success) {
                     float orientation[] = new float[3];

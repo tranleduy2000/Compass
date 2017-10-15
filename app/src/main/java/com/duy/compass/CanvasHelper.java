@@ -17,8 +17,8 @@ public class CanvasHelper {
     private int mWidth, mHeight;
     private Point mCenter;
     private float mUnitPadding;
-    private float mClockNumberSize = 25;
-    private float mDirectionTextSize = 40f;
+    private float mClockNumberSize = 30;
+    private float mDirectionTextSize = 50f;
     private int mRotate;
 
     public CanvasHelper() {
@@ -56,10 +56,39 @@ public class CanvasHelper {
         mPath.lineTo(x - length / 2, y - length);
         canvas.drawPath(mPath, mPaint);
 
-        mPaint.setTextSize(realPx(50));
+        mPaint.setTextSize(realPx(70));
         mPaint.setColor(Color.WHITE);
-        String str = mRotate + "°E";
+        String str = mRotate + "° " + getDirectionText(mRotate);
         canvas.drawText(str, x - mPaint.measureText(str) / 2, y - length - realPx(10), mPaint);
+    }
+
+    private String getDirectionText(int degree) {
+        final float step = 22.5f;
+        if (degree >= 0 && degree < step || degree > 360 - step) {
+            return "N";
+        }
+        if (degree >= step && degree < step * 3) {
+            return "NE";
+        }
+        if (degree >= step * 3 && degree < step * 5) {
+            return "E";
+        }
+        if (degree >= step * 5 && degree < step * 7) {
+            return "SE";
+        }
+        if (degree >= step * 7 && degree < step * 9) {
+            return "S";
+        }
+        if (degree >= step * 9 && degree < step * 11) {
+            return "SW";
+        }
+        if (degree >= step * 11 && degree < step * 13) {
+            return "W";
+        }
+        if (degree >= step * 13 && degree < step * 15) {
+            return "NW";
+        }
+        return "";
     }
 
     private void initPaint() {
@@ -165,21 +194,24 @@ public class CanvasHelper {
 
     private void drawNumber(Canvas canvas) {
         float radius = 330;
-        drawNumber(canvas, 300.0f, "30", mClockNumberSize, radius);
-        drawNumber(canvas, 330.0f, "60", mClockNumberSize, radius);
-        drawNumber(canvas, 360.0f, "90", mClockNumberSize, radius);
-        drawNumber(canvas, 30.0f, "120", mClockNumberSize, radius);
-        drawNumber(canvas, 60.0f, "150", mClockNumberSize, radius);
-        drawNumber(canvas, 90.0f, "180", mClockNumberSize, radius);
-        drawNumber(canvas, 120.0f, "210", mClockNumberSize, radius);
-        drawNumber(canvas, 150.0f, "240", mClockNumberSize, radius);
-        drawNumber(canvas, 180.0f, "270", mClockNumberSize, radius);
-        drawNumber(canvas, 210.0f, "300", mClockNumberSize, radius);
-        drawNumber(canvas, 240.0f, "330", mClockNumberSize, radius);
+        mNumberPaint.setTextSize(mClockNumberSize);
+        mNumberPaint.setColor(Color.WHITE);
+        mNumberPaint.setTypeface(Typeface.DEFAULT);
+
+        drawNumber(canvas, 300.0f, "30", radius);
+        drawNumber(canvas, 330.0f, "60", radius);
+        drawNumber(canvas, 360.0f, "90", radius);
+        drawNumber(canvas, 30.0f, "120", radius);
+        drawNumber(canvas, 60.0f, "150", radius);
+        drawNumber(canvas, 90.0f, "180", radius);
+        drawNumber(canvas, 120.0f, "210", radius);
+        drawNumber(canvas, 150.0f, "240", radius);
+        drawNumber(canvas, 180.0f, "270", radius);
+        drawNumber(canvas, 210.0f, "300", radius);
+        drawNumber(canvas, 240.0f, "330", radius);
     }
 
-    private void drawNumber(Canvas canvas, float degree, String text, float textSize, float radius) {
-        mNumberPaint.setTextSize(textSize);
+    private void drawNumber(Canvas canvas, float degree, String text, float radius) {
         Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
         float height = fm.bottom - fm.top + fm.leading;
 
@@ -209,16 +241,15 @@ public class CanvasHelper {
         float fontHeight = fm.bottom - fm.top + fm.leading;
         float radiusPx = realPx(330) - fontHeight - realPx(mUnitPadding);
 
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTypeface(Typeface.DEFAULT_BOLD);
-        paint.setColor(Color.RED);
-        paint.setTextSize(realPx(mDirectionTextSize));
+        mPaint.setTypeface((Typeface.MONOSPACE));
+        mPaint.setColor(Color.RED);
+        mPaint.setTextSize(realPx(mDirectionTextSize));
 
-        drawDirectionText(canvas, 270, "N", radiusPx, paint);
-        paint.setColor(Color.WHITE);
-        drawDirectionText(canvas, 0, "E", radiusPx, paint);
-        drawDirectionText(canvas, 90, "S", radiusPx, paint);
-        drawDirectionText(canvas, 180, "W", radiusPx, paint);
+        drawDirectionText(canvas, 270, "N", radiusPx, mPaint);
+        mPaint.setColor(Color.WHITE);
+        drawDirectionText(canvas, 0, "E", radiusPx, mPaint);
+        drawDirectionText(canvas, 90, "S", radiusPx, mPaint);
+        drawDirectionText(canvas, 180, "W", radiusPx, mPaint);
     }
 
     private void drawDirectionText(Canvas canvas, float degree, String text, float radiusPx, Paint paint) {
