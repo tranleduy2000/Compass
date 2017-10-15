@@ -23,7 +23,7 @@ public class SensorListener implements SensorEventListener {
     private float mCurrentAzimuth = 0;
     @Nullable
     private OnValueChangedListener mOnValueChangedListener;
-    private int mIntervalTime = 2;
+    private int mIntervalTime = 0;
     private long mLastTime = 0;
 
     public SensorListener(Context context) {
@@ -44,7 +44,7 @@ public class SensorListener implements SensorEventListener {
     private void onChangeValue() {
         Log.i(TAG, "will set rotation from " + mCurrentAzimuth + " to " + mAzimuth);
         if (mOnValueChangedListener != null) {
-            mOnValueChangedListener.onCompassChangeValue(mCurrentAzimuth, mAzimuth);
+            mOnValueChangedListener.onCompassChangeValue(-mCurrentAzimuth, -mAzimuth);
         }
         mCurrentAzimuth = mAzimuth;
     }

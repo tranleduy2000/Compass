@@ -5,7 +5,8 @@ import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 import com.duy.compass.CanvasHelper;
 import com.duy.compass.SensorListener;
@@ -14,10 +15,13 @@ import com.duy.compass.SensorListener;
  * Created by Duy on 10/15/2017.
  */
 
-public class CompassView extends View implements SensorListener.OnValueChangedListener {
+public class CompassView extends SurfaceView implements SensorListener.OnValueChangedListener,
+        SurfaceHolder.Callback, Runnable {
     CanvasHelper mCanvasHelper;
-    private boolean mIsPortrait;
     private SensorListener mSensorListener;
+    private Thread mCurrentThread;
+    private boolean mIsPortrait;
+    private volatile boolean mIsActive;
 
     public CompassView(Context context) {
         super(context);
@@ -35,6 +39,7 @@ public class CompassView extends View implements SensorListener.OnValueChangedLi
     }
 
     private void init(Context context) {
+        getHolder().addCallback(this);
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
         mCanvasHelper = new CanvasHelper();
@@ -88,6 +93,56 @@ public class CompassView extends View implements SensorListener.OnValueChangedLi
     @Override
     public void onCompassChangeValue(float oldDegree, float newDegree) {
         mCanvasHelper.setRotate(newDegree);
-        invalidate();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        this.mIsActive = true;
+        this.mCurrentThread = new Thread(this);
+        this.mCurrentThread.start();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        this.mIsActive = false;
+        if (this.mCurrentThread != null) {
+            try {
+                this.mCurrentThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.mCurrentThread = null;
+        }
+    }
+
+    public void run() {
+        while (this.mIsActive) {
+            long currentTimeMillis = System.currentTimeMillis();
+            try {
+                Canvas canvas = getHolder().lockCanvas();
+                if (canvas != null) {
+                    mCanvasHelper.draw(canvas);
+                }
+                if (canvas != null) {
+                    try {
+                        getHolder().unlockCanvasAndPost(canvas);
+                    } catch (Throwable e) {
+                    }
+                }
+                long floor = ((long) Math.floor(16.0d)) - (System.currentTimeMillis() - currentTimeMillis);
+                if (floor > 0) {
+                    try {
+                        Thread.sleep(floor);
+                    } catch (InterruptedException e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            } catch (Throwable th) {
+            }
+        }
     }
 }

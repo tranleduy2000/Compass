@@ -11,6 +11,8 @@ import android.text.TextPaint;
 
 public class CanvasHelper {
     private final TextPaint mNumberPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Path mPath = new Path();
     private float mPixelScale;
     private int mWidth, mHeight;
     private Point mCenter;
@@ -37,7 +39,24 @@ public class CanvasHelper {
 
         drawCircle(canvas);
         drawClock(canvas);
-        drawDirection(canvas);
+        drawValue(canvas);
+    }
+
+    private void drawValue(Canvas canvas) {
+        //draw triangle
+        mPaint.setStyle(Style.FILL);
+        mPaint.setColor(Color.WHITE);
+        float x, y;
+        x = mCenter.x;
+        y = mCenter.y - realWidth(430 + mUnitPadding * 2);
+        mPath.reset();
+        float length = realWidth(20);
+        mPath.lineTo(x - length / 2.0f, y - length);
+        mPath.lineTo(x + length / 2.0f, y - length);
+        mPath.lineTo(x, y);
+        mPath.lineTo(x - length / 2.0f, y - length);
+        canvas.drawPath(mPath, mPaint);
+
     }
 
     private void initPaint() {
@@ -47,41 +66,83 @@ public class CanvasHelper {
 
     private void drawCircle(Canvas canvas) {
         float radius = realWidth(430);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.GRAY);
-        paint.setStyle(Style.STROKE);
-        paint.setStrokeWidth(realWidth(3));
+        mPaint.setColor(Color.GRAY);
+        mPaint.setStyle(Style.STROKE);
+        mPaint.setStrokeWidth(realWidth(3));
 
-        canvas.drawCircle(mCenter.x, mCenter.y, radius, paint);
+        canvas.drawCircle(mCenter.x, mCenter.y, radius, mPaint);
 
-        paint.setColor(Color.DKGRAY);
+        mPaint.setColor(Color.DKGRAY);
 
         mNumberPaint.setTextSize(realWidth(mClockNumberSize));
         Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
         float fontHeight = fm.bottom - fm.top + fm.leading;
 
         float strokeWidth = 20 + fontHeight;
-        paint.setStrokeWidth(realWidth(strokeWidth));
+        mPaint.setStrokeWidth(realWidth(strokeWidth));
 
         radius = realWidth(350 - strokeWidth / 2.0f - mUnitPadding);
-        canvas.drawCircle(mCenter.x, mCenter.y, radius, paint);
+        canvas.drawCircle(mCenter.x, mCenter.y, radius, mPaint);
     }
 
     private void drawClock(Canvas canvas) {
-        canvas.rotate(mRotate, mCenter.x, mCenter.y);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        drawClock(canvas, paint, mCenter);
-        drawClock1(canvas, paint, mCenter);
+        canvas.rotate(-mRotate + 180, mCenter.x, mCenter.y);
+        drawClock(canvas, mCenter);
+        drawClock1(canvas, mCenter);
         drawNumber(canvas);
-        canvas.rotate(-mRotate, mCenter.x, mCenter.y);
+        drawDirectionText(canvas);
+        canvas.rotate(mRotate - 180, mCenter.x, mCenter.y);
     }
 
-    private void drawDirection(Canvas canvas) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(realWidth(5));
-        Path path = new Path();
+
+    private void drawClock(Canvas canvas, Point center) {
+        mPaint.setColor(Color.GRAY);
+        mPaint.setStyle(Style.STROKE);
+        mPaint.setStrokeWidth(realWidth(3));
+        mPath.reset();
+        float degreeStep = 2.5f;
+        for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
+            float cos = (float) Math.cos(step);
+            float sin = (float) Math.sin(step);
+
+            float x = realWidth(350) * cos;
+            float y = realWidth(350) * sin;
+            mPath.moveTo(x + ((float) center.x), y + ((float) center.y));
+
+            x = realWidth(380) * cos;
+            y = realWidth(380) * sin;
+            mPath.lineTo(x + ((float) center.x), y + ((float) center.y));
+        }
+        canvas.drawPath(mPath, mPaint);
+    }
+
+    private float realWidth(float width) {
+        return width * mPixelScale;
+    }
+
+    private void drawClock1(Canvas canvas, Point center) {
+        mPaint.setColor(Color.WHITE);
+        mPaint.setStrokeWidth(realWidth(5));
+        mPath.reset();
+        float degreeStep = 30.0f;
+        for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
+            float cos = (float) Math.cos(step);
+            float sin = (float) Math.sin(step);
+
+            float x = realWidth(330) * cos;
+            float y = realWidth(330) * sin;
+            mPath.moveTo(x + ((float) center.x), y + ((float) center.y));
+
+            cos *= realWidth(380);
+            sin *= realWidth(380);
+            mPath.lineTo(cos + ((float) center.x), sin + ((float) center.y));
+        }
+        canvas.drawPath(mPath, mPaint);
+
+        mPaint.setColor(Color.RED);
+        mPaint.setStrokeWidth(realWidth(5));
+
+        mPath.reset();
 
         float radian = (float) Math.toRadians(270.0d);
 
@@ -90,75 +151,12 @@ public class CanvasHelper {
 
         float x = realWidth(320) * cos;
         float y = realWidth(320) * sin;
-        path.moveTo(((float) mCenter.x) + x, ((float) mCenter.y) + y);
+        mPath.moveTo(((float) mCenter.x) + x, ((float) mCenter.y) + y);
 
         x = realWidth(400) * cos;
         y = realWidth(400) * sin;
-        path.lineTo(x + ((float) mCenter.x), y + ((float) mCenter.y));
-        canvas.drawPath(path, paint);
-
-
-        //draw triangle
-        paint.setStyle(Style.FILL);
-        paint.setColor(Color.WHITE);
-
-        x = mCenter.x;
-        y = mCenter.y - realWidth(430 + mUnitPadding * 2);
-        path.reset();
-        float length = realWidth(20);
-        path.lineTo(x - length / 2.0f, y - length);
-        path.lineTo(x + length / 2.0f, y - length);
-        path.lineTo(x, y);
-        path.lineTo(x - length / 2.0f, y - length);
-        canvas.drawPath(path, paint);
-
-        drawDirectionText(canvas);
-    }
-
-
-    private void drawClock(Canvas canvas, Paint paint, Point center) {
-        paint.setColor(Color.GRAY);
-        paint.setStyle(Style.STROKE);
-        paint.setStrokeWidth(realWidth(3));
-        Path path = new Path();
-        float degreeStep = 2.5f;
-        for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
-            float cos = (float) Math.cos(step);
-            float sin = (float) Math.sin(step);
-
-            float x = realWidth(350) * cos;
-            float y = realWidth(350) * sin;
-            path.moveTo(x + ((float) center.x), y + ((float) center.y));
-
-            x = realWidth(380) * cos;
-            y = realWidth(380) * sin;
-            path.lineTo(x + ((float) center.x), y + ((float) center.y));
-        }
-        canvas.drawPath(path, paint);
-    }
-
-    private float realWidth(float width) {
-        return width * mPixelScale;
-    }
-
-    private void drawClock1(Canvas canvas, Paint paint, Point center) {
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(realWidth(5));
-        Path path = new Path();
-        float degreeStep = 30.0f;
-        for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
-            float cos = (float) Math.cos(step);
-            float sin = (float) Math.sin(step);
-
-            float x = realWidth(330) * cos;
-            float y = realWidth(330) * sin;
-            path.moveTo(x + ((float) center.x), y + ((float) center.y));
-
-            cos *= realWidth(380);
-            sin *= realWidth(380);
-            path.lineTo(cos + ((float) center.x), sin + ((float) center.y));
-        }
-        canvas.drawPath(path, paint);
+        mPath.lineTo(x + ((float) mCenter.x), y + ((float) mCenter.y));
+        canvas.drawPath(mPath, mPaint);
     }
 
     private void drawNumber(Canvas canvas) {
@@ -212,11 +210,11 @@ public class CanvasHelper {
         paint.setColor(Color.RED);
         paint.setTextSize(realWidth(mDirectionTextSize));
 
-        drawDirectionText(canvas, 270, "N",  radiusPx, paint);
+        drawDirectionText(canvas, 270, "N", radiusPx, paint);
         paint.setColor(Color.WHITE);
-        drawDirectionText(canvas, 0, "E",  radiusPx, paint);
-        drawDirectionText(canvas, 90, "S",  radiusPx, paint);
-        drawDirectionText(canvas, 180, "W",  radiusPx, paint);
+        drawDirectionText(canvas, 0, "E", radiusPx, paint);
+        drawDirectionText(canvas, 90, "S", radiusPx, paint);
+        drawDirectionText(canvas, 180, "W", radiusPx, paint);
     }
 
     private void drawDirectionText(Canvas canvas, float degree, String text, float radiusPx, Paint paint) {
