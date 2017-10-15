@@ -1,4 +1,4 @@
-package com.duy.compass.view;
+package com.duy.compass;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.text.TextPaint;
 
 public class CanvasHelper {
@@ -15,7 +16,8 @@ public class CanvasHelper {
     private Point mCenter;
     private float mUnitPadding;
     private float mClockNumberSize = 25;
-    private float mDirectionTextSize = 25f;
+    private float mDirectionTextSize = 30f;
+    private float mRotate;
 
     public CanvasHelper() {
     }
@@ -66,11 +68,13 @@ public class CanvasHelper {
     }
 
     private void drawClock(Canvas canvas) {
+        canvas.rotate(mRotate, mCenter.x, mCenter.y);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         drawClock(canvas, paint, mCenter);
         drawClock1(canvas, paint, mCenter);
         drawNumber(canvas);
+        canvas.rotate(-mRotate, mCenter.x, mCenter.y);
     }
 
     private void drawDirection(Canvas canvas) {
@@ -108,17 +112,9 @@ public class CanvasHelper {
         path.lineTo(x - length / 2.0f, y - length);
         canvas.drawPath(path, paint);
 
-        //draw direction N S E W
-        //N = 0, E = 90, S = 180, W = 270
-        mNumberPaint.setTextSize(realWidth(mClockNumberSize));
-        Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
-        float fontHeight = fm.bottom - fm.top + fm.leading;
-        float radius = 330 - fontHeight - mUnitPadding ;
-        drawText(canvas, 270, "N", mDirectionTextSize, radius);
-        drawText(canvas, 0, "E", mDirectionTextSize, radius);
-        drawText(canvas, 90, "S", mDirectionTextSize, radius);
-        drawText(canvas, 180, "W", mDirectionTextSize, radius);
+        drawDirectionText(canvas);
     }
+
 
     private void drawClock(Canvas canvas, Paint paint, Point center) {
         paint.setColor(Color.GRAY);
@@ -167,20 +163,20 @@ public class CanvasHelper {
 
     private void drawNumber(Canvas canvas) {
         float radius = 330;
-        drawText(canvas, 300.0f, "30", mClockNumberSize, radius);
-        drawText(canvas, 330.0f, "60", mClockNumberSize, radius);
-        drawText(canvas, 360.0f, "90", mClockNumberSize, radius);
-        drawText(canvas, 30.0f, "120", mClockNumberSize, radius);
-        drawText(canvas, 60.0f, "150", mClockNumberSize, radius);
-        drawText(canvas, 90.0f, "180", mClockNumberSize, radius);
-        drawText(canvas, 120.0f, "210", mClockNumberSize, radius);
-        drawText(canvas, 150.0f, "240", mClockNumberSize, radius);
-        drawText(canvas, 180.0f, "270", mClockNumberSize, radius);
-        drawText(canvas, 210.0f, "300", mClockNumberSize, radius);
-        drawText(canvas, 240.0f, "330", mClockNumberSize, radius);
+        drawNumber(canvas, 300.0f, "30", mClockNumberSize, radius);
+        drawNumber(canvas, 330.0f, "60", mClockNumberSize, radius);
+        drawNumber(canvas, 360.0f, "90", mClockNumberSize, radius);
+        drawNumber(canvas, 30.0f, "120", mClockNumberSize, radius);
+        drawNumber(canvas, 60.0f, "150", mClockNumberSize, radius);
+        drawNumber(canvas, 90.0f, "180", mClockNumberSize, radius);
+        drawNumber(canvas, 120.0f, "210", mClockNumberSize, radius);
+        drawNumber(canvas, 150.0f, "240", mClockNumberSize, radius);
+        drawNumber(canvas, 180.0f, "270", mClockNumberSize, radius);
+        drawNumber(canvas, 210.0f, "300", mClockNumberSize, radius);
+        drawNumber(canvas, 240.0f, "330", mClockNumberSize, radius);
     }
 
-    private void drawText(Canvas canvas, float degree, String text, float textSize, float radius) {
+    private void drawNumber(Canvas canvas, float degree, String text, float textSize, float radius) {
         mNumberPaint.setTextSize(textSize);
         Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
         float height = fm.bottom - fm.top + fm.leading;
@@ -201,5 +197,49 @@ public class CanvasHelper {
         canvas.drawText(text, -mNumberPaint.measureText(text) / 2.0f, height, mNumberPaint);
 
         canvas.restore();
+    }
+
+    private void drawDirectionText(Canvas canvas) {
+        //draw direction N S E W
+        //N = 0, E = 90, S = 180, W = 270
+        mNumberPaint.setTextSize(realWidth(mClockNumberSize));
+        Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
+        float fontHeight = fm.bottom - fm.top + fm.leading;
+        float radiusPx = realWidth(330) - fontHeight - realWidth(mUnitPadding);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTypeface(Typeface.DEFAULT_BOLD);
+        paint.setColor(Color.RED);
+        paint.setTextSize(realWidth(mDirectionTextSize));
+
+        drawDirectionText(canvas, 270, "N",  radiusPx, paint);
+        paint.setColor(Color.WHITE);
+        drawDirectionText(canvas, 0, "E",  radiusPx, paint);
+        drawDirectionText(canvas, 90, "S",  radiusPx, paint);
+        drawDirectionText(canvas, 180, "W",  radiusPx, paint);
+    }
+
+    private void drawDirectionText(Canvas canvas, float degree, String text, float radiusPx, Paint paint) {
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        float height = fm.bottom - fm.top + fm.leading;
+
+        float cos = (float) Math.cos(Math.toRadians(degree));
+        float sin = (float) Math.sin(Math.toRadians(degree));
+
+        float x = (cos * (radiusPx)) + mCenter.x;
+        float y = (sin * (radiusPx)) + mCenter.y;
+
+        canvas.drawPoint(x, y, paint);
+        canvas.drawPoint(mCenter.x, mCenter.y, paint);
+
+        canvas.save();
+        canvas.translate(x, y);
+        canvas.rotate(90.0f + degree);
+        canvas.drawText(text, -paint.measureText(text) / 2.0f, height, paint);
+        canvas.restore();
+    }
+
+    public void setRotate(float rotate) {
+        this.mRotate = rotate;
     }
 }

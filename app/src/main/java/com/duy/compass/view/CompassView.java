@@ -7,13 +7,17 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.duy.compass.CanvasHelper;
+import com.duy.compass.SensorListener;
+
 /**
  * Created by Duy on 10/15/2017.
  */
 
-public class CompassView extends View {
+public class CompassView extends View implements SensorListener.OnValueChangedListener {
     CanvasHelper mCanvasHelper;
     private boolean mIsPortrait;
+    private SensorListener mSensorListener;
 
     public CompassView(Context context) {
         super(context);
@@ -31,10 +35,25 @@ public class CompassView extends View {
     }
 
     private void init(Context context) {
-//        getHolder().addCallback(this);
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
         mCanvasHelper = new CanvasHelper();
+
+        mSensorListener = new SensorListener(context);
+        mSensorListener.setOnValueChangedListener(this);
+
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        mSensorListener.start();
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mSensorListener.stop();
+        super.onDetachedFromWindow();
     }
 
     @Override
@@ -64,5 +83,11 @@ public class CompassView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mCanvasHelper.draw(canvas);
+    }
+
+    @Override
+    public void onCompassChangeValue(float oldDegree, float newDegree) {
+        mCanvasHelper.setRotate(newDegree);
+        invalidate();
     }
 }
