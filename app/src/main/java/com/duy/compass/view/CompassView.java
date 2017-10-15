@@ -49,17 +49,6 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
 
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        mSensorListener.start();
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        mSensorListener.stop();
-        super.onDetachedFromWindow();
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -85,12 +74,6 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        mCanvasHelper.draw(canvas);
-    }
-
-    @Override
     public void onCompassChangeValue(float oldDegree, float newDegree) {
         mCanvasHelper.setRotate(newDegree);
     }
@@ -100,6 +83,7 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
         this.mIsActive = true;
         this.mCurrentThread = new Thread(this);
         this.mCurrentThread.start();
+        this.mSensorListener.start();
     }
 
     @Override
@@ -107,7 +91,9 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
 
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        this.mSensorListener.stop();
         this.mIsActive = false;
         if (this.mCurrentThread != null) {
             try {
@@ -117,6 +103,12 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
             }
             this.mCurrentThread = null;
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.mIsActive = false;
     }
 
     public void run() {
@@ -130,7 +122,7 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
                 if (canvas != null) {
                     try {
                         getHolder().unlockCanvasAndPost(canvas);
-                    } catch (Throwable e) {
+                    } catch (Throwable ignored) {
                     }
                 }
                 long floor = ((long) Math.floor(16.0d)) - (System.currentTimeMillis() - currentTimeMillis);
@@ -141,7 +133,7 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
                         e2.printStackTrace();
                     }
                 }
-            } catch (Throwable th) {
+            } catch (Throwable ignored) {
             }
         }
     }

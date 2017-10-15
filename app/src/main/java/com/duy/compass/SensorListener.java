@@ -33,8 +33,8 @@ public class SensorListener implements SensorEventListener {
     }
 
     public void start() {
-        mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mMagneticSensor, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(this, mMagneticSensor, SensorManager.SENSOR_DELAY_UI);
     }
 
     public void stop() {
@@ -42,9 +42,9 @@ public class SensorListener implements SensorEventListener {
     }
 
     private void onChangeValue() {
-        Log.i(TAG, "will set rotation from " + mCurrentAzimuth + " to " + mAzimuth);
+        Log.d(TAG, "will set rotation from " + mCurrentAzimuth + " to " + mAzimuth);
         if (mOnValueChangedListener != null) {
-            mOnValueChangedListener.onCompassChangeValue(-mCurrentAzimuth, -mAzimuth);
+            mOnValueChangedListener.onCompassChangeValue(mCurrentAzimuth, mAzimuth);
         }
         mCurrentAzimuth = mAzimuth;
     }
@@ -92,7 +92,6 @@ public class SensorListener implements SensorEventListener {
                 if (success) {
                     float orientation[] = new float[3];
                     SensorManager.getOrientation(R, orientation);
-                    // Log.d(TAG, "azimuth (rad): " + azimuth);
                     mAzimuth = (float) Math.toDegrees(orientation[0]); // orientation
                     mAzimuth = (mAzimuth + 360) % 360;
                     // Log.d(TAG, "azimuth (deg): " + azimuth);
