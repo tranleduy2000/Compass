@@ -1,4 +1,4 @@
-package com.duy.compass;
+package com.duy.compass.compass;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -6,27 +6,38 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.Typeface;
+import android.graphics.RectF;
+import android.support.annotation.Nullable;
 import android.text.TextPaint;
+
+import com.duy.compass.model.SunTime;
 
 public class CanvasHelper {
     private final TextPaint mNumberPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path mPath = new Path();
+
+
+    @Nullable
+    private SunTime mSunTime = new SunTime(30, 123);
+
     private float mPixelScale;
-    private int mWidth, mHeight;
     private Point mCenter;
     private float mUnitPadding;
     private float mClockNumberSize = 30;
     private float mDirectionTextSize = 50f;
+    @Nullable
+    private Path mClockPathSecondary = null;
+    @Nullable
+    private Path mClockPathPrimary = null;
     private int mRotate;
 
     public CanvasHelper() {
     }
 
     public void draw(Canvas canvas) {
-        mWidth = canvas.getWidth();
-        mHeight = canvas.getHeight();
+        int mWidth = canvas.getWidth();
+        int mHeight = canvas.getHeight();
         mPixelScale = ((float) mWidth) / 1000.0f;
         mCenter = new Point(mWidth / 2, mHeight / 2);
         mUnitPadding = realPx(5);
@@ -37,9 +48,42 @@ public class CanvasHelper {
         //draw background
         canvas.drawRGB(0, 0, 0);
 
+        drawCenter(canvas);
         drawCircle(canvas);
         drawClock(canvas);
         drawValue(canvas);
+        drawSunTime(canvas);
+    }
+
+    /**
+     * Draw two line at center
+     */
+    private void drawCenter(Canvas canvas) {
+        float radius = realPx(70);
+        mPath.moveTo(mCenter.x - radius, mCenter.y);
+        mPath.lineTo(mCenter.x + radius, mCenter.y);
+        mPath.moveTo(mCenter.x, mCenter.y - radius);
+        mPath.lineTo(mCenter.x, mCenter.y + radius);
+
+        mPaint.setColor(Color.WHITE);
+        mPaint.setStrokeWidth(realPx(3));
+        mPaint.setStyle(Style.STROKE);
+        canvas.drawPath(mPath, mPaint);
+    }
+
+    private void drawSunTime(Canvas canvas) {
+        if (mSunTime == null) return;
+        float sunRise = mSunTime.getSunRise();
+        float sunShine = mSunTime.getSunShine();
+        mPaint.setColor(Color.YELLOW);
+        mPaint.setStyle(Style.STROKE);
+        mPaint.setStrokeWidth(realPx(10));
+        float step = realPx(405);
+
+        mPath.reset();
+        RectF bound = new RectF(mCenter.x - step, mCenter.y - step, mCenter.x + step, mCenter.y + step);
+        mPath.addArc(bound, sunRise, Math.abs(sunShine - sunRise));
+        canvas.drawPath(mPath, mPaint);
     }
 
     private void drawValue(Canvas canvas) {
@@ -94,6 +138,7 @@ public class CanvasHelper {
     private void initPaint() {
         mNumberPaint.setTextSize(realPx(mClockNumberSize));
         mNumberPaint.setColor(Color.WHITE);
+//        mNumberPaint.setTypeface(Typeface.DEFAULT);
     }
 
     private void drawCircle(Canvas canvas) {
@@ -106,7 +151,6 @@ public class CanvasHelper {
 
         mPaint.setColor(Color.DKGRAY);
 
-        mNumberPaint.setTextSize(realPx(mClockNumberSize));
         Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
         float fontHeight = fm.bottom - fm.top + fm.leading;
 
@@ -132,21 +176,24 @@ public class CanvasHelper {
         mPaint.setColor(Color.GRAY);
         mPaint.setStyle(Style.STROKE);
         mPaint.setStrokeWidth(realPx(3));
-        mPath.reset();
-        float degreeStep = 2.5f;
-        for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
-            float cos = (float) Math.cos(step);
-            float sin = (float) Math.sin(step);
 
-            float x = realPx(350) * cos;
-            float y = realPx(350) * sin;
-            mPath.moveTo(x + ((float) center.x), y + ((float) center.y));
+        if (mClockPathSecondary == null) {
+            mClockPathSecondary = new Path();
+            float degreeStep = 2.5f;
+            for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
+                float cos = (float) Math.cos(step);
+                float sin = (float) Math.sin(step);
 
-            x = realPx(380) * cos;
-            y = realPx(380) * sin;
-            mPath.lineTo(x + ((float) center.x), y + ((float) center.y));
+                float x = realPx(350) * cos;
+                float y = realPx(350) * sin;
+                mClockPathSecondary.moveTo(x + ((float) center.x), y + ((float) center.y));
+
+                x = realPx(380) * cos;
+                y = realPx(380) * sin;
+                mClockPathSecondary.lineTo(x + ((float) center.x), y + ((float) center.y));
+            }
         }
-        canvas.drawPath(mPath, mPaint);
+        canvas.drawPath(mClockPathSecondary, mPaint);
     }
 
     private float realPx(float width) {
@@ -156,27 +203,28 @@ public class CanvasHelper {
     private void drawClock1(Canvas canvas, Point center) {
         mPaint.setColor(Color.WHITE);
         mPaint.setStrokeWidth(realPx(5));
-        mPath.reset();
-        float degreeStep = 30.0f;
-        for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
-            float cos = (float) Math.cos(step);
-            float sin = (float) Math.sin(step);
 
-            float x = realPx(330) * cos;
-            float y = realPx(330) * sin;
-            mPath.moveTo(x + ((float) center.x), y + ((float) center.y));
+        if (mClockPathPrimary == null) {
+            mClockPathPrimary = new Path();
+            float degreeStep = 30.0f;
+            for (float step = 0.0f; step < 2 * Math.PI; step += Math.toRadians(degreeStep)) {
+                float cos = (float) Math.cos(step);
+                float sin = (float) Math.sin(step);
 
-            cos *= realPx(380);
-            sin *= realPx(380);
-            mPath.lineTo(cos + ((float) center.x), sin + ((float) center.y));
+                float x = realPx(330) * cos;
+                float y = realPx(330) * sin;
+                mClockPathPrimary.moveTo(x + ((float) center.x), y + ((float) center.y));
+
+                cos *= realPx(380);
+                sin *= realPx(380);
+                mClockPathPrimary.lineTo(cos + ((float) center.x), sin + ((float) center.y));
+            }
         }
-        canvas.drawPath(mPath, mPaint);
+        canvas.drawPath(mClockPathPrimary, mPaint);
 
         mPaint.setColor(Color.RED);
         mPaint.setStrokeWidth(realPx(5));
-
         mPath.reset();
-
         float radian = (float) Math.toRadians(270.0d);
 
         float cos = (float) Math.cos((double) radian);
@@ -194,9 +242,7 @@ public class CanvasHelper {
 
     private void drawNumber(Canvas canvas) {
         float radius = 330;
-        mNumberPaint.setTextSize(mClockNumberSize);
-        mNumberPaint.setColor(Color.WHITE);
-        mNumberPaint.setTypeface(Typeface.DEFAULT);
+
 
         drawNumber(canvas, 300.0f, "30", radius);
         drawNumber(canvas, 330.0f, "60", radius);
@@ -221,8 +267,8 @@ public class CanvasHelper {
         float x = (cos * realPx(radius)) + mCenter.x;
         float y = (sin * realPx(radius)) + mCenter.y;
 
-        canvas.drawPoint(x, y, mNumberPaint);
-        canvas.drawPoint(mCenter.x, mCenter.y, mNumberPaint);
+//        canvas.drawPoint(x, y, mNumberPaint);
+//        canvas.drawPoint(mCenter.x, mCenter.y, mNumberPaint);
 
         canvas.save();
 
@@ -236,12 +282,10 @@ public class CanvasHelper {
     private void drawDirectionText(Canvas canvas) {
         //draw direction N S E W
         //N = 0, E = 90, S = 180, W = 270
-        mNumberPaint.setTextSize(realPx(mClockNumberSize));
         Paint.FontMetrics fm = mNumberPaint.getFontMetrics();
         float fontHeight = fm.bottom - fm.top + fm.leading;
         float radiusPx = realPx(330) - fontHeight - realPx(mUnitPadding);
 
-        mPaint.setTypeface((Typeface.MONOSPACE));
         mPaint.setColor(Color.RED);
         mPaint.setTextSize(realPx(mDirectionTextSize));
 
@@ -262,8 +306,8 @@ public class CanvasHelper {
         float x = (cos * (radiusPx)) + mCenter.x;
         float y = (sin * (radiusPx)) + mCenter.y;
 
-        canvas.drawPoint(x, y, paint);
-        canvas.drawPoint(mCenter.x, mCenter.y, paint);
+//        canvas.drawPoint(x, y, paint);
+//        canvas.drawPoint(mCenter.x, mCenter.y, paint);
 
         canvas.save();
         canvas.translate(x, y);
@@ -274,5 +318,7 @@ public class CanvasHelper {
 
     public void setRotate(float rotate) {
         this.mRotate = (int) rotate;
+        this.mSunTime.setSunRise(rotate % 360);
+        this.mSunTime.setSunShine((float) ((rotate + 90)));
     }
 }
