@@ -9,8 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.duy.compass.DLog;
-import com.duy.compass.model.Sunshine;
-import com.duy.compass.weather.sync.WeatherManager;
+import com.duy.compass.weather.sync.FetchWeatherTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +25,7 @@ public class LocationListener implements android.location.LocationListener {
     private Context mContext;
     @Nullable
     private LocationHelper.LocationValueListener mLocationValueListener;
+    private FetchWeatherTask mFetchWeatherTask;
 
     public LocationListener(@NonNull Context context) {
         this.mContext = context;
@@ -56,10 +56,11 @@ public class LocationListener implements android.location.LocationListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            WeatherManager weatherManager = new WeatherManager(mContext);
-            Sunshine sunshine = weatherManager.getSunTime(location);
-            System.out.println("sunTime = " + sunshine);
-            mLocationValueListener.onUpdateSunTime(sunshine);
+            if (mFetchWeatherTask != null) {
+                mFetchWeatherTask.cancel(true);
+            }
+            mFetchWeatherTask = new FetchWeatherTask(mLocationValueListener, mContext);
+            mFetchWeatherTask.execute(location);
         }
     }
 
@@ -77,4 +78,6 @@ public class LocationListener implements android.location.LocationListener {
     public void onProviderDisabled(String provider) {
 
     }
+
+
 }

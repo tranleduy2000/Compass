@@ -75,7 +75,7 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
 
     @Override
     public void onCompassRotate(float oldDegree, float newDegree) {
-        mCanvasHelper.setRotate(newDegree);
+        mCanvasHelper.getSensorValue().setCompassRotate(newDegree);
     }
 
     @Override

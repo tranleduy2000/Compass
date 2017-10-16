@@ -29,7 +29,7 @@ public class CanvasHelper {
     private Path mClockPathSecondary = null;
     @Nullable
     private Path mClockPathPrimary = null;
-    private int mRotate;
+
     public CanvasHelper() {
     }
 
@@ -52,9 +52,33 @@ public class CanvasHelper {
 
         drawCenter(canvas);
         drawCircle(canvas);
+        drawMagnetic(canvas);
         drawClock(canvas);
         drawValue(canvas);
         drawSunTime(canvas);
+    }
+
+    private void drawMagnetic(Canvas canvas) {
+        float step = realPx(450);
+
+        mPath.reset();
+        mPathPaint.setStrokeWidth(realPx(25));
+        mPathPaint.setColor(Color.GRAY);
+
+        RectF bound = new RectF(mCenter.x - step, mCenter.y - step, mCenter.x + step, mCenter.y + step);
+        int sweepAngle = 100;
+        mPath.addArc(bound, 310, sweepAngle);
+        canvas.drawPath(mPath, mPathPaint);
+
+        float magneticField = mSensorValue.getMagneticField();
+        int max = 100;
+        float percent = magneticField / max;
+        percent = percent * sweepAngle;
+
+        mPath.reset();
+        mPath.addArc(bound, sweepAngle - percent, sweepAngle);
+        mPathPaint.setColor(Color.GREEN);
+        canvas.drawPath(mPath, mPathPaint);
     }
 
     /**
@@ -104,11 +128,11 @@ public class CanvasHelper {
 
         mPathPaint.setTextSize(realPx(80));
         mPathPaint.setColor(Color.WHITE);
-        String str = mRotate + "° " + getDirectionText(mRotate);
+        String str = ((int) mSensorValue.getCompassRotate()) + "° " + getDirectionText(mSensorValue.getCompassRotate());
         canvas.drawText(str, x - mPathPaint.measureText(str) / 2, y - length - realPx(10), mPathPaint);
     }
 
-    private String getDirectionText(int degree) {
+    private String getDirectionText(float degree) {
         final float step = 22.5f;
         if (degree >= 0 && degree < step || degree > 360 - step) {
             return "N";
@@ -167,7 +191,7 @@ public class CanvasHelper {
 
     private void drawClock(Canvas canvas) {
         canvas.save();
-        canvas.rotate(-mRotate, mCenter.x, mCenter.y);
+        canvas.rotate(-mSensorValue.getCompassRotate(), mCenter.x, mCenter.y);
         drawClock(canvas, mCenter);
         drawClockBig(canvas, mCenter);
         drawNumber(canvas);
@@ -322,9 +346,4 @@ public class CanvasHelper {
         canvas.restore();
     }
 
-    public void setRotate(float rotate) {
-        this.mRotate = (int) rotate;
-//        this.mSunTime.setSunrise((long) (rotate % 360));
-//        this.mSunTime.setSunset((float) ((rotate + 90)));
-    }
 }
