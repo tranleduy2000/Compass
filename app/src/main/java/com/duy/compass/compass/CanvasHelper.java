@@ -100,7 +100,7 @@ public class CanvasHelper {
         mPath.lineTo(x - length / 2, y - length);
         canvas.drawPath(mPath, mPathPaint);
 
-        mPathPaint.setTextSize(realPx(70));
+        mPathPaint.setTextSize(realPx(80));
         mPathPaint.setColor(Color.WHITE);
         String str = mRotate + "° " + getDirectionText(mRotate);
         canvas.drawText(str, x - mPathPaint.measureText(str) / 2, y - length - realPx(10), mPathPaint);
@@ -203,7 +203,6 @@ public class CanvasHelper {
     }
 
     private void drawClockBig(Canvas canvas, Point center) {
-        mPathPaint.setColor(Color.WHITE);
         mPathPaint.setStrokeWidth(realPx(7));
 
         if (mClockPathPrimary == null) {
@@ -222,10 +221,9 @@ public class CanvasHelper {
                 mClockPathPrimary.lineTo(cos + ((float) center.x), sin + ((float) center.y));
             }
         }
+        mPathPaint.setColor(Color.WHITE);
         canvas.drawPath(mClockPathPrimary, mPathPaint);
 
-        mPathPaint.setColor(Color.RED);
-        mPathPaint.setStrokeWidth(realPx(5));
         mPath.reset();
         float radian = (float) Math.toRadians(270.0d);
 
@@ -239,6 +237,9 @@ public class CanvasHelper {
         x = realPx(400) * cos;
         y = realPx(400) * sin;
         mPath.lineTo(x + ((float) mCenter.x), y + ((float) mCenter.y));
+        mPathPaint.setColor(Color.RED);
+        mPathPaint.setStrokeWidth(realPx(9));
+
         canvas.drawPath(mPath, mPathPaint);
     }
 
