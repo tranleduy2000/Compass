@@ -9,7 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.duy.compass.compass.CanvasHelper;
-import com.duy.compass.SensorListener;
+import com.duy.compass.sensor.SensorListener;
 
 /**
  * Created by Duy on 10/15/2017.
@@ -74,8 +74,13 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
     }
 
     @Override
-    public void onCompassChangeValue(float oldDegree, float newDegree) {
+    public void onCompassRotate(float oldDegree, float newDegree) {
         mCanvasHelper.setRotate(newDegree);
+    }
+
+    @Override
+    public void onMagneticFieldChanged(float value) {
+
     }
 
     @Override

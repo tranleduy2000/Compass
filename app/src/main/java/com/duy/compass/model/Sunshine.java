@@ -9,8 +9,15 @@ import java.util.Locale;
  */
 
 public class Sunshine {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+
+    /**
+     * Sunset time, in millisecond
+     */
     private long sunset;
+    /**
+     * sunrise time, in millisecond
+     */
     private long sunrise;
 
     public Sunshine(long sunset, long sunrise) {
@@ -21,8 +28,8 @@ public class Sunshine {
     @Override
     public String toString() {
         return "SunTime{" +
-                "sunset=" + DATE_FORMAT.format(new Date(sunset)) +
-                ", sunrise=" + DATE_FORMAT.format(new Date(sunrise)) +
+                "sunset=" + getReadableSunsetTime() +
+                ", sunrise=" + getReadableSunriseTime() +
                 '}';
     }
 
@@ -40,5 +47,14 @@ public class Sunshine {
 
     public void setSunrise(long sunrise) {
         this.sunrise = sunrise;
+    }
+
+    public String getReadableSunriseTime() {
+        return DATE_FORMAT.format(new Date(sunrise));
+    }
+
+    public String getReadableSunsetTime() {
+        return DATE_FORMAT.format(new Date(sunset));
+
     }
 }

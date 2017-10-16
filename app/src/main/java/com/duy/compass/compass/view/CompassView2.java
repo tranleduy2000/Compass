@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.duy.compass.compass.CanvasHelper;
-import com.duy.compass.SensorListener;
+import com.duy.compass.sensor.SensorListener;
 
 /**
  * Created by Duy on 10/15/2017.
@@ -81,8 +81,14 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
     }
 
     @Override
-    public void onCompassChangeValue(float oldDegree, float newDegree) {
-        mCanvasHelper.setRotate(newDegree);
+    public void onCompassRotate(float oldDegree, float newDegree) {
+        mCanvasHelper.getSensorValue().setCompassRotate(newDegree);
+        postInvalidate();
+    }
+
+    @Override
+    public void onMagneticFieldChanged(float value) {
+        mCanvasHelper.getSensorValue().setMagneticField(value);
         postInvalidate();
     }
 

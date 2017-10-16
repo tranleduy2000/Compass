@@ -197,7 +197,7 @@ public class WeatherManager {
         JSONObject sysJson = forecastJson.getJSONObject("sys");
         long sunrise = sysJson.getLong("sunrise");
         long sunset = sysJson.getLong("sunset");
-        return new Sunshine(sunset, sunrise);
+        return new Sunshine(sunset * 1000, sunrise * 1000);
     }
 
     private String getWeatherForecastData(double lon, double lat) {

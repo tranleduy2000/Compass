@@ -12,7 +12,7 @@ import com.duy.compass.model.Sunshine;
 
 public class MainActivity extends AppCompatActivity implements LocationHelper.LocationValueListener {
 
-    private TextView mTxtAddress;
+    private TextView mTxtAddress, mTxtSunrise, mTxtSunset;
 
     private LocationHelper mLocationHelper;
     private CompassView2 mCompassView;
@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements LocationHelper.Lo
 
     private void bindView() {
         mTxtAddress = (TextView) findViewById(R.id.txt_address);
+        mTxtSunrise = (TextView) findViewById(R.id.txt_sunrise);
+        mTxtSunset = (TextView) findViewById(R.id.txt_sunset);
     }
 
     private void createMainView() {
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements LocationHelper.Lo
 
     @Override
     public void onUpdateSunTime(Sunshine sunshine) {
-
+        mTxtSunrise.setText(sunshine.getReadableSunriseTime());
+        mTxtSunset.setText(sunshine.getReadableSunsetTime());
     }
 }

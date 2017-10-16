@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 
+import com.duy.compass.model.SensorValue;
 import com.duy.compass.model.Sunshine;
 
 public class CanvasHelper {
@@ -17,11 +18,9 @@ public class CanvasHelper {
     private final Paint mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private final Path mPath = new Path();
-
-
+    private final SensorValue mSensorValue = new SensorValue();
     @Nullable
     private Sunshine mSunshine = new Sunshine(30, 123);
-
     private float mPixelScale;
     private Point mCenter;
     private float mUnitPadding;
@@ -31,8 +30,11 @@ public class CanvasHelper {
     @Nullable
     private Path mClockPathPrimary = null;
     private int mRotate;
-
     public CanvasHelper() {
+    }
+
+    public SensorValue getSensorValue() {
+        return mSensorValue;
     }
 
     public void draw(Canvas canvas) {

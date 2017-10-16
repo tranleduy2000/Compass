@@ -1,4 +1,4 @@
-package com.duy.compass;
+package com.duy.compass.sensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -45,7 +45,7 @@ public class SensorListener implements SensorEventListener {
     private void onChangeValue() {
 //        Log.d(TAG, "will set rotation from " + mCurrentAzimuth + " to " + mAzimuth);
         if (mOnValueChangedListener != null) {
-            mOnValueChangedListener.onCompassChangeValue(mCurrentAzimuth, mAzimuth);
+            mOnValueChangedListener.onCompassRotate(mCurrentAzimuth, mAzimuth);
         }
         mCurrentAzimuth = mAzimuth;
     }
@@ -85,6 +85,11 @@ public class SensorListener implements SensorEventListener {
                             * event.values[2];
                     // Log.e(TAG, Float.toString(event.values[0]));
 
+                    float magneticField = (float) Math.sqrt(mGeomagnetic[0] * mGeomagnetic[0] +
+                            mGeomagnetic[1] * mGeomagnetic[1] + mGeomagnetic[2] * mGeomagnetic[2]);
+                    if (mOnValueChangedListener != null) {
+                        mOnValueChangedListener.onMagneticFieldChanged(magneticField);
+                    }
                 }
 
 
@@ -95,7 +100,10 @@ public class SensorListener implements SensorEventListener {
                     mAzimuth = (float) Math.toDegrees(orientation[0]); // orientation
                     mAzimuth = (mAzimuth + 360) % 360;
                     // Log.d(TAG, "azimuth (deg): " + azimuth);
-                    onChangeValue();
+
+                    if (mOnValueChangedListener != null) {
+                        mOnValueChangedListener.onCompassRotate(mCurrentAzimuth, mAzimuth);
+                    }
                 }
             }
             mLastTime = time;
@@ -107,6 +115,11 @@ public class SensorListener implements SensorEventListener {
     }
 
     public interface OnValueChangedListener {
-        void onCompassChangeValue(float oldDegree, float newDegree);
+        void onCompassRotate(float oldDegree, float newDegree);
+
+        /**
+         * @param value absolute uT value read from the magnetometer
+         */
+        void onMagneticFieldChanged(float value);
     }
 }
