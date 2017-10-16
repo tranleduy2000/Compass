@@ -4,25 +4,42 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.duy.compass.location.LocationHelper;
 import com.duy.compass.compass.view.CompassView2;
+import com.duy.compass.location.LocationHelper;
+import com.duy.compass.model.Sunshine;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationHelper.LocationValueListener {
+
+    private TextView mTxtAddress;
 
     private LocationHelper mLocationHelper;
+    private CompassView2 mCompassView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ViewGroup content = (ViewGroup) findViewById(R.id.content);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        content.addView(new CompassView2(this), params);
+        createMainView();
+        bindView();
 
         mLocationHelper = new LocationHelper(this);
+        mLocationHelper.setLocationValueListener(this);
         mLocationHelper.onCreate();
+    }
+
+    private void bindView() {
+        mTxtAddress = (TextView) findViewById(R.id.txt_address);
+    }
+
+    private void createMainView() {
+        ViewGroup content = (ViewGroup) findViewById(R.id.content);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mCompassView = new CompassView2(this);
+        content.addView(mCompassView, params);
     }
 
     @Override
@@ -32,4 +49,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onUpdateAddressLine(String name) {
+        mTxtAddress.setText(name);
+    }
+
+    @Override
+    public void onUpdateSunTime(Sunshine sunshine) {
+
+    }
 }
