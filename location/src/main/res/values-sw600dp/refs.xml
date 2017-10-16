@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    Layout alias to replace the single-pane version fo the layout with
+    two-pane version on Large screens
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    -->
+    <item type="layout" name="fragment_detail">@layout/fragment_detail_wide</item>
+</resources>

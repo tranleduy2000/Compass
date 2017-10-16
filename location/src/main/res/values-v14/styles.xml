@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- For backward compatibility -->
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Sunshine</item>
+    </style>
+
+    <!-- ActionBar style -->
+    <style name="ActionBar.Solid.Sunshine"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/sunshine_light_blue</item>
+    </style>
+
+    <!-- Main activity theme -->
+    <style name="ForecastTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
+    </style>
+
+    <!-- Main activity action bar style -->
+    <style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/ActionBar.Solid.Sunshine">
+        <item name="android:displayOptions">useLogo|showHome</item>
+        <item name="android:logo">@drawable/ic_logo</item>
+    </style>
+</resources>

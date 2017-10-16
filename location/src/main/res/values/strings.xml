@@ -1,9 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">Compass</string>
-    <string name="cardinal_north">N</string>
-    <string name="cardinal_east">E</string>
-    <string name="cardinal_south">S</string>
-    <string name="cardinal_west">W</string>
+
+    <string name="app_name">Sunshine</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_map">Location</string>
+    <string name="action_share">Share</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Label for the location preference [CHAR LIMIT=NONE] -->
     <string name="pref_location_label">Location</string>
@@ -71,4 +77,5 @@
     <string name="format_notification">
         Forecast: <xliff:g id="condition">%1$s</xliff:g> High: <xliff:g id="high">%2$s</xliff:g>
     </string>
+
 </resources>

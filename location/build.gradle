@@ -4,7 +4,8 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "com.duy.compass"
+        applicationId "com.desmond.sunshine"
+
         minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
@@ -28,16 +29,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    compile 'com.google.android.gms:play-services-ads:11.4.2'
-    compile 'com.google.android.gms:play-services-maps:11.4.2'
-    compile 'com.google.android.gms:play-services-location:11.4.2'
-
-    compile 'com.google.firebase:firebase-core:11.0.4'
-    compile 'com.google.firebase:firebase-crash:11.0.4'
-
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    compile 'com.android.support:appcompat-v7:26.+'
+    // You must install or update the Support Repository through the SDK manager to use this dependency.
+    compile 'com.android.support:support-v4:26.+'
 
     testCompile 'junit:junit:4.12'
 }
 
-
-apply plugin: 'com.google.gms.google-services'
