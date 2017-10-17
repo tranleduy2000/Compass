@@ -37,11 +37,12 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
     private void init(Context context) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
-        mCanvasHelper = new CanvasHelper();
+        mCanvasHelper = new CanvasHelper(context);
 
-        mSensorListener = new SensorListener(context);
-        mSensorListener.setOnValueChangedListener(this);
-
+        if (!isInEditMode()) {
+            mSensorListener = new SensorListener(context);
+            mSensorListener.setOnValueChangedListener(this);
+        }
     }
 
 
@@ -71,12 +72,16 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mSensorListener.start();
+        if (mSensorListener != null) {
+            mSensorListener.start();
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        mSensorListener.stop();
+        if (mSensorListener != null) {
+            mSensorListener.stop();
+        }
         super.onDetachedFromWindow();
     }
 

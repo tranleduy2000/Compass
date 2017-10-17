@@ -1,24 +1,34 @@
 package com.duy.compass.compass;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 
 import com.duy.compass.model.SensorValue;
 import com.duy.compass.model.Sunshine;
 
+import java.util.Locale;
+
+import static com.duy.compass.compass.Utility.getDirectionText;
+
 public class CanvasHelper {
     private final Paint mNumberTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mDirectionTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
+    private final Paint mMagneticPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path mPath = new Path();
     private final SensorValue mSensorValue = new SensorValue();
+
+    private Typeface mTypeface;
     @Nullable
     private Sunshine mSunshine = new Sunshine(30, 123);
     private float mPixelScale;
@@ -30,7 +40,8 @@ public class CanvasHelper {
     @Nullable
     private Path mClockPathPrimary = null;
 
-    public CanvasHelper() {
+    public CanvasHelper(Context context) {
+        mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
     }
 
     public SensorValue getSensorValue() {
@@ -38,10 +49,8 @@ public class CanvasHelper {
     }
 
     public void draw(Canvas canvas) {
-        int mWidth = canvas.getWidth();
-        int mHeight = canvas.getHeight();
-        mPixelScale = ((float) mWidth) / 1000.0f;
-        mCenter = new Point(mWidth / 2, mHeight / 2);
+        mPixelScale = ((float) Math.min(canvas.getWidth(), canvas.getHeight())) / 1000.0f;
+        mCenter = new Point(canvas.getWidth() / 2, canvas.getHeight() / 2);
         mUnitPadding = realPx(5);
         mDirectionTextSize = realPx(40f);
 
@@ -67,18 +76,20 @@ public class CanvasHelper {
 
         RectF bound = new RectF(mCenter.x - step, mCenter.y - step, mCenter.x + step, mCenter.y + step);
         int sweepAngle = 100;
-        mPath.addArc(bound, 310, sweepAngle);
+        mPath.addArc(bound, 310, 100);
         canvas.drawPath(mPath, mPathPaint);
 
         float magneticField = mSensorValue.getMagneticField();
-        int max = 100;
+        int max = 160;
         float percent = magneticField / max;
         percent = percent * sweepAngle;
 
         mPath.reset();
-        mPath.addArc(bound, sweepAngle - percent, sweepAngle);
-        mPathPaint.setColor(Color.GREEN);
-        canvas.drawPath(mPath, mPathPaint);
+        mPath.addArc(bound, 310 + sweepAngle - percent, percent);
+        canvas.drawPath(mPath, mMagneticPaint);
+
+        drawText(canvas, 305, String.format(Locale.US, "%dμT", (int) mSensorValue.getMagneticField()), 445, 30);
+        drawText(canvas, 60, "mag.field", 445, 30);
     }
 
     /**
@@ -132,41 +143,20 @@ public class CanvasHelper {
         canvas.drawText(str, x - mPathPaint.measureText(str) / 2, y - length - realPx(10), mPathPaint);
     }
 
-    private String getDirectionText(float degree) {
-        final float step = 22.5f;
-        if (degree >= 0 && degree < step || degree > 360 - step) {
-            return "N";
-        }
-        if (degree >= step && degree < step * 3) {
-            return "NE";
-        }
-        if (degree >= step * 3 && degree < step * 5) {
-            return "E";
-        }
-        if (degree >= step * 5 && degree < step * 7) {
-            return "SE";
-        }
-        if (degree >= step * 7 && degree < step * 9) {
-            return "S";
-        }
-        if (degree >= step * 9 && degree < step * 11) {
-            return "SW";
-        }
-        if (degree >= step * 11 && degree < step * 13) {
-            return "W";
-        }
-        if (degree >= step * 13 && degree < step * 15) {
-            return "NW";
-        }
-        return "";
-    }
 
     private void initPaint() {
-        float mClockNumberSize = 30;
-        mNumberTextPaint.setTextSize(realPx(mClockNumberSize));
+        mNumberTextPaint.setTextSize(realPx(30));
         mNumberTextPaint.setColor(Color.WHITE);
+        mNumberTextPaint.setTypeface(mTypeface);
 
         mDirectionTextPaint.setTextSize(realPx(mDirectionTextSize));
+        mDirectionTextPaint.setTypeface(mTypeface);
+
+        LinearGradient gradient = new LinearGradient(0, 0, 0, realPx(500), Color.GREEN, Color.RED, Shader.TileMode.MIRROR);
+        mMagneticPaint.setShader(gradient);
+        mMagneticPaint.setStrokeWidth(realPx(25));
+        mMagneticPaint.setStyle(Style.STROKE);
+
     }
 
     private void drawCircle(Canvas canvas) {
@@ -308,6 +298,39 @@ public class CanvasHelper {
         canvas.restore();
     }
 
+    private void drawText(Canvas canvas, float degree, String text, float radius, float size) {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(realPx(size));
+        paint.setColor(Color.GRAY);
+        paint.setTypeface(mTypeface);
+
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        float height = fm.bottom - fm.top + fm.leading;
+
+        float cos = (float) Math.cos(Math.toRadians(degree));
+        float sin = (float) Math.sin(Math.toRadians(degree));
+
+        float x = (cos * realPx(radius)) + mCenter.x;
+        float y = (sin * realPx(radius)) + mCenter.y;
+
+//        canvas.drawPoint(x, y, mNumberPaint);
+//        canvas.drawPoint(mCenter.x, mCenter.y, mNumberPaint);
+
+        canvas.save();
+
+        canvas.translate(x, y);
+        if (degree > 0 && degree < 180) {
+            canvas.rotate(270 + degree);
+            canvas.drawText(text, -paint.measureText(text) / 2.0f, height / 2, paint);
+        } else {
+            canvas.rotate(90 + degree);
+            canvas.drawText(text, -paint.measureText(text) / 2.0f, 0, paint);
+
+        }
+
+        canvas.restore();
+    }
+
     private void drawDirectionText(Canvas canvas) {
         //draw direction N S E W
         //N = 0, E = 90, S = 180, W = 270
@@ -341,6 +364,7 @@ public class CanvasHelper {
 
         canvas.save();
         canvas.translate(x, y);
+
         canvas.rotate(90 + degree);
         canvas.drawText(text, -paint.measureText(text) / 2.0f, height, paint);
         canvas.restore();

@@ -42,7 +42,7 @@ public class CompassView extends SurfaceView implements SensorListener.OnValueCh
         getHolder().addCallback(this);
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
-        mCanvasHelper = new CanvasHelper();
+        mCanvasHelper = new CanvasHelper(context);
 
         mSensorListener = new SensorListener(context);
         mSensorListener.setOnValueChangedListener(this);
