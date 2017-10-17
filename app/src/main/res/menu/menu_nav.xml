@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_weather"
+        android:icon="@drawable/ic_wb_sunny_white_24dp"
+        android:title="@string/weather" />
+    <item
+        android:id="@+id/action_compass"
+        android:icon="@drawable/ic_gps_fixed_white_24dp"
+        android:title="@string/compass" />
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_map_white_24dp"
+        android:title="@string/map" />
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/setting" />
+</menu>

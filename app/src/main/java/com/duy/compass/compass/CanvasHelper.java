@@ -57,7 +57,7 @@ public class CanvasHelper {
         initPaint();
 
         //draw background
-        canvas.drawRGB(0, 0, 0);
+//        canvas.drawRGB(0, 0, 0);
         drawCircle(canvas);
         drawMagnetic(canvas);
         drawClock(canvas);
@@ -118,12 +118,6 @@ public class CanvasHelper {
         drawText(canvas, 60, "mag.field", 445, 30);
     }
 
-    /**
-     * Draw two line at center
-     */
-    private void drawCenter(Canvas canvas) {
-
-    }
 
     private void drawSunTime(Canvas canvas) {
         if (mSunshine == null) return;

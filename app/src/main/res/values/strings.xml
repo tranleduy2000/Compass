@@ -71,4 +71,8 @@
     <string name="format_notification">
         Forecast: <xliff:g id="condition">%1$s</xliff:g> High: <xliff:g id="high">%2$s</xliff:g>
     </string>
+    <string name="compass">Compass</string>
+    <string name="setting">Setting</string>
+    <string name="map">Map</string>
+    <string name="weather">Weather</string>
 </resources>
