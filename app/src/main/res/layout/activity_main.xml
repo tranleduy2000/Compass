@@ -9,12 +9,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
             android:src="@drawable/ic_gps_fixed_white_24dp" />
 
         <TextView
@@ -28,12 +28,36 @@
             android:text="Long Xuyen An GIang - Viet Nam" />
     </LinearLayout>
 
+
     <FrameLayout
-        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         tools:context="com.duy.compass.MainActivity">
+
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:id="@+id/txt_pitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="X " /><!--pitch-->
+
+            <TextView
+                android:id="@+id/txt_roll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Y " /><!--roll-->
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -41,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:padding="4dp">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="wrap_content"

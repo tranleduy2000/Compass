@@ -2,21 +2,29 @@ package com.duy.compass.compass.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.duy.compass.compass.CanvasHelper;
-import com.duy.compass.sensor.SensorListener;
+import com.duy.compass.model.SensorValue;
 
 /**
  * Created by Duy on 10/15/2017.
  */
 
-public class CompassView2 extends View implements SensorListener.OnValueChangedListener {
+public class CompassView2 extends View  {
+    private final Handler mHandler = new Handler();
+    private final Runnable mDraw = new Runnable() {
+        @Override
+        public void run() {
+            invalidate();
+            mHandler.postDelayed(this, 1000 / 60);
+        }
+    };
     private CanvasHelper mCanvasHelper;
-    private SensorListener mSensorListener;
     private boolean mIsPortrait;
 
     public CompassView2(Context context) {
@@ -29,6 +37,7 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
         init(context);
     }
 
+
     public CompassView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
@@ -39,12 +48,7 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
         mCanvasHelper = new CanvasHelper(context);
 
-        if (!isInEditMode()) {
-            mSensorListener = new SensorListener(context);
-            mSensorListener.setOnValueChangedListener(this);
-        }
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -72,34 +76,24 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mSensorListener != null) {
-            mSensorListener.start();
-        }
+        mHandler.post(mDraw);
+
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (mSensorListener != null) {
-            mSensorListener.stop();
-        }
+        mHandler.removeCallbacks(mDraw);
         super.onDetachedFromWindow();
     }
 
-    @Override
-    public void onRotationChanged(float azimuth, float roll, float pitch) {
-        mCanvasHelper.getSensorValue().setRotation(azimuth, roll, pitch);
-        postInvalidate();
-    }
-
-    @Override
-    public void onMagneticFieldChanged(float value) {
-        mCanvasHelper.getSensorValue().setMagneticField(value);
-        postInvalidate();
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mCanvasHelper.draw(canvas);
+    }
+
+    public SensorValue getSensorValue() {
+        return mCanvasHelper.getSensorValue();
     }
 }

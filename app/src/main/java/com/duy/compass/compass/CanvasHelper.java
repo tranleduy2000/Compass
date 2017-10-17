@@ -58,13 +58,39 @@ public class CanvasHelper {
 
         //draw background
         canvas.drawRGB(0, 0, 0);
-
-        drawCenter(canvas);
         drawCircle(canvas);
         drawMagnetic(canvas);
         drawClock(canvas);
         drawValue(canvas);
         drawSunTime(canvas);
+        drawPitchRoll(canvas);
+    }
+
+    private void drawPitchRoll(Canvas canvas) {
+        mPathPaint.setColor(Color.GRAY);
+        mPathPaint.setStyle(Style.FILL);
+        float roll = mSensorValue.getRoll();
+        float pitch = mSensorValue.getPitch();
+
+        float radius = realPx(20);
+
+        float cosP = (float) Math.cos(Math.toRadians(pitch - 90));
+        int length = 150;
+        float x = (float) (realPx(length) * cosP);
+        float cosR = (float) Math.cos(Math.toRadians(roll - 90));
+        float y = (float) (realPx(length) * cosR);
+        canvas.drawCircle(mCenter.x - x, mCenter.y + y, radius, mPathPaint);
+
+        radius = realPx(length / 2);
+        mPath.moveTo(mCenter.x - radius, mCenter.y);
+        mPath.lineTo(mCenter.x + radius, mCenter.y);
+        mPath.moveTo(mCenter.x, mCenter.y - radius);
+        mPath.lineTo(mCenter.x, mCenter.y + radius);
+
+        mPathPaint.setColor(Color.WHITE);
+        mPathPaint.setStrokeWidth(realPx(3));
+        mPathPaint.setStyle(Style.STROKE);
+        canvas.drawPath(mPath, mPathPaint);
     }
 
     private void drawMagnetic(Canvas canvas) {
@@ -80,7 +106,7 @@ public class CanvasHelper {
         canvas.drawPath(mPath, mPathPaint);
 
         float magneticField = mSensorValue.getMagneticField();
-        int max = 100;
+        int max = 160;
         float percent = magneticField / max;
         percent = percent * sweepAngle;
 
@@ -96,16 +122,7 @@ public class CanvasHelper {
      * Draw two line at center
      */
     private void drawCenter(Canvas canvas) {
-        float radius = realPx(70);
-        mPath.moveTo(mCenter.x - radius, mCenter.y);
-        mPath.lineTo(mCenter.x + radius, mCenter.y);
-        mPath.moveTo(mCenter.x, mCenter.y - radius);
-        mPath.lineTo(mCenter.x, mCenter.y + radius);
 
-        mPathPaint.setColor(Color.WHITE);
-        mPathPaint.setStrokeWidth(realPx(3));
-        mPathPaint.setStyle(Style.STROKE);
-        canvas.drawPath(mPath, mPathPaint);
     }
 
     private void drawSunTime(Canvas canvas) {
@@ -127,6 +144,8 @@ public class CanvasHelper {
         //draw triangle
         mPathPaint.setStyle(Style.FILL);
         mPathPaint.setColor(Color.WHITE);
+        mPathPaint.setStrokeWidth(realPx(3));
+
         int x = mCenter.x;
         int y = (int) (mCenter.y - realPx(430 + mUnitPadding * 2));
         mPath.reset();
@@ -149,7 +168,7 @@ public class CanvasHelper {
         mNumberTextPaint.setColor(Color.WHITE);
         mNumberTextPaint.setTypeface(mTypeface);
 
-        mDirectionTextPaint.setTextSize(realPx(mDirectionTextSize));
+        mDirectionTextPaint.setTextSize(realPx(60));
         mDirectionTextPaint.setTypeface(mTypeface);
 
         LinearGradient gradient = new LinearGradient(0, 0, 0, realPx(500), Color.GREEN, Color.RED, Shader.TileMode.MIRROR);
@@ -339,16 +358,19 @@ public class CanvasHelper {
         float radiusPx = realPx(330) - fontHeight - realPx(mUnitPadding);
 
         mDirectionTextPaint.setColor(Color.RED);
+        mDirectionTextPaint.setTextSize(realPx(60));
 
         drawDirectionText(canvas, 270, "N", radiusPx, mDirectionTextPaint);
         mDirectionTextPaint.setColor(Color.WHITE);
+        drawDirectionText(canvas, 0, "E", radiusPx, mDirectionTextPaint);
+        drawDirectionText(canvas, 90, "S", radiusPx, mDirectionTextPaint);
+        drawDirectionText(canvas, 180, "W", radiusPx, mDirectionTextPaint);
+
+        mDirectionTextPaint.setTextSize(realPx(40));
 
         drawDirectionText(canvas, 315, "NE", radiusPx, mDirectionTextPaint);
-        drawDirectionText(canvas, 0, "E", radiusPx, mDirectionTextPaint);
         drawDirectionText(canvas, 45, "SE", radiusPx, mDirectionTextPaint);
-        drawDirectionText(canvas, 90, "S", radiusPx, mDirectionTextPaint);
         drawDirectionText(canvas, 135, "SW", radiusPx, mDirectionTextPaint);
-        drawDirectionText(canvas, 180, "W", radiusPx, mDirectionTextPaint);
         drawDirectionText(canvas, 225, "NW", radiusPx, mDirectionTextPaint);
     }
 

@@ -9,13 +9,17 @@ import android.widget.TextView;
 import com.duy.compass.compass.view.CompassView2;
 import com.duy.compass.location.LocationHelper;
 import com.duy.compass.model.Sunshine;
+import com.duy.compass.sensor.SensorListener;
 
-public class MainActivity extends AppCompatActivity implements LocationHelper.LocationValueListener {
+import java.util.Locale;
 
-    private TextView mTxtAddress, mTxtSunrise, mTxtSunset;
+public class MainActivity extends AppCompatActivity implements LocationHelper.LocationValueListener, SensorListener.OnValueChangedListener {
+
+    private TextView mTxtAddress, mTxtSunrise, mTxtSunset, mTxtPitch, mTxtRoll;
 
     private LocationHelper mLocationHelper;
     private CompassView2 mCompassView;
+    private SensorListener mSensorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +32,17 @@ public class MainActivity extends AppCompatActivity implements LocationHelper.Lo
         mLocationHelper = new LocationHelper(this);
         mLocationHelper.setLocationValueListener(this);
         mLocationHelper.onCreate();
+
+        mSensorListener = new SensorListener(this);
+        mSensorListener.setOnValueChangedListener(this);
     }
 
     private void bindView() {
         mTxtAddress = (TextView) findViewById(R.id.txt_address);
         mTxtSunrise = (TextView) findViewById(R.id.txt_sunrise);
         mTxtSunset = (TextView) findViewById(R.id.txt_sunset);
+        mTxtRoll = (TextView) findViewById(R.id.txt_roll);
+        mTxtPitch = (TextView) findViewById(R.id.txt_pitch);
     }
 
     private void createMainView() {
@@ -50,6 +59,22 @@ public class MainActivity extends AppCompatActivity implements LocationHelper.Lo
         mLocationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mSensorListener != null) {
+            mSensorListener.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (mSensorListener != null) {
+            mSensorListener.stop();
+        }
+        super.onStop();
+
+    }
 
     @Override
     public void onUpdateAddressLine(String name) {
@@ -60,5 +85,22 @@ public class MainActivity extends AppCompatActivity implements LocationHelper.Lo
     public void onUpdateSunTime(Sunshine sunshine) {
         mTxtSunrise.setText(sunshine.getReadableSunriseTime());
         mTxtSunset.setText(sunshine.getReadableSunsetTime());
+    }
+
+    @Override
+    public void onRotationChanged(float azimuth, float roll, float pitch) {
+        mCompassView.getSensorValue().setRotation(azimuth, roll, pitch);
+        mTxtRoll.setText(String.format(Locale.US, "Y %.1f°", roll));
+        mTxtPitch.setText(String.format(Locale.US, "X %.1f°", pitch));
+    }
+
+    @Override
+    public void onMagneticFieldChanged(float value) {
+        mCompassView.getSensorValue().setMagneticField(value);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

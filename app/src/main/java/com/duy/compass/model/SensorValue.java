@@ -11,7 +11,6 @@ public class SensorValue {
     private float pitch;
 
 
-
     public float getMagneticField() {
         return magneticField;
     }
@@ -29,6 +28,9 @@ public class SensorValue {
         this.azimuth = azimuth;
     }
 
+    /**
+     * @return roll value in angle
+     */
     public float getRoll() {
         return roll;
     }
@@ -45,6 +47,11 @@ public class SensorValue {
         this.pitch = pitch;
     }
 
+    /**
+     * @param azimuth - degrees
+     * @param roll    - degrees
+     * @param pitch   - degrees
+     */
     public void setRotation(float azimuth, float roll, float pitch) {
         this.azimuth = azimuth;
         this.roll = roll;
