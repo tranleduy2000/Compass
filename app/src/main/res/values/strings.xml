@@ -75,4 +75,7 @@
     <string name="setting">Setting</string>
     <string name="map">Map</string>
     <string name="weather">Weather</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false"></string>
+    <string name="title_activity_maps">Map</string>
 </resources>

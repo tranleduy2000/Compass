@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 
 import com.duy.compass.fragments.CompassFragment;
-import com.duy.compass.fragments.MapFragment;
+import com.duy.compass.fragments.CompassMapFragment;
 import com.duy.compass.fragments.SettingFragment;
 import com.duy.compass.fragments.WeatherFragment;
 import com.duy.compass.view.CustomViewPager;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         return new CompassFragment();
                     case 2:
-                        return new MapFragment();
+                        return new CompassMapFragment();
                     case 3:
                         return new SettingFragment();
                 }
