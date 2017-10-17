@@ -6,7 +6,7 @@
         android:title="@string/weather" />
     <item
         android:id="@+id/action_compass"
-        android:icon="@drawable/ic_gps_fixed_white_24dp"
+        android:icon="@drawable/ic_compass_white"
         android:title="@string/compass" />
     <item
         android:id="@+id/action_map"

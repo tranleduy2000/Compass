@@ -3,10 +3,15 @@ package com.duy.compass;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 
 import com.duy.compass.fragments.CompassFragment;
+import com.duy.compass.fragments.MapFragment;
+import com.duy.compass.fragments.SettingFragment;
+import com.duy.compass.fragments.WeatherFragment;
+import com.duy.compass.view.CustomViewPager;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -15,9 +20,29 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        CompassFragment compassFragment = (CompassFragment) getSupportFragmentManager().findFragmentByTag(CompassFragment.TAG);
-        if (compassFragment == null) compassFragment = CompassFragment.newInstance();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content, compassFragment, CompassFragment.TAG).commit();
+        CustomViewPager viewPager = (CustomViewPager) findViewById(R.id.view_pager);
+        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public int getCount() {
+                return 4;
+            }
+
+            @Override
+            public Fragment getItem(int position) {
+                switch (position) {
+                    case 0:
+                        return new WeatherFragment();
+                    case 1:
+                        return new CompassFragment();
+                    case 2:
+                        return new MapFragment();
+                    case 3:
+                        return new SettingFragment();
+                }
+                return null;
+            }
+        };
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
     }
 }
