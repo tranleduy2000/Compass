@@ -86,8 +86,8 @@ public class CompassView2 extends View implements SensorListener.OnValueChangedL
     }
 
     @Override
-    public void onCompassRotate(float oldDegree, float newDegree) {
-        mCanvasHelper.getSensorValue().setCompassRotate(newDegree);
+    public void onRotationChanged(float azimuth, float roll, float pitch) {
+        mCanvasHelper.getSensorValue().setRotation(azimuth, roll, pitch);
         postInvalidate();
     }
 

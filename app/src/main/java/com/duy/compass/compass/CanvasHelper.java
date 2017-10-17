@@ -80,7 +80,7 @@ public class CanvasHelper {
         canvas.drawPath(mPath, mPathPaint);
 
         float magneticField = mSensorValue.getMagneticField();
-        int max = 160;
+        int max = 100;
         float percent = magneticField / max;
         percent = percent * sweepAngle;
 
@@ -139,7 +139,7 @@ public class CanvasHelper {
 
         mPathPaint.setTextSize(realPx(80));
         mPathPaint.setColor(Color.WHITE);
-        String str = ((int) mSensorValue.getCompassRotate()) + "° " + getDirectionText(mSensorValue.getCompassRotate());
+        String str = ((int) mSensorValue.getAzimuth()) + "° " + getDirectionText(mSensorValue.getAzimuth());
         canvas.drawText(str, x - mPathPaint.measureText(str) / 2, y - length - realPx(10), mPathPaint);
     }
 
@@ -181,7 +181,7 @@ public class CanvasHelper {
 
     private void drawClock(Canvas canvas) {
         canvas.save();
-        canvas.rotate(-mSensorValue.getCompassRotate(), mCenter.x, mCenter.y);
+        canvas.rotate(-mSensorValue.getAzimuth(), mCenter.x, mCenter.y);
         drawClock(canvas, mCenter);
         drawClockBig(canvas, mCenter);
         drawNumber(canvas);
