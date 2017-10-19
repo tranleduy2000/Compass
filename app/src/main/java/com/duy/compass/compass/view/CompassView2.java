@@ -15,15 +15,17 @@ import com.duy.compass.model.SensorValue;
  * Created by Duy on 10/15/2017.
  */
 
-public class CompassView2 extends View  {
+public class CompassView2 extends View {
     private final Handler mHandler = new Handler();
     private final Runnable mDraw = new Runnable() {
         @Override
         public void run() {
             invalidate();
+            mHandler.removeCallbacks(this);
             mHandler.postDelayed(this, 1000 / 60);
         }
     };
+
     private CanvasHelper mCanvasHelper;
     private boolean mIsPortrait;
 
@@ -86,6 +88,11 @@ public class CompassView2 extends View  {
         super.onDetachedFromWindow();
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mCanvasHelper.onSizeChanged(w, h, oldw, oldh);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {

@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
+import com.duy.compass.DLog;
 import com.duy.compass.R;
 import com.duy.compass.model.SensorValue;
 import com.duy.compass.model.Sunshine;
@@ -25,6 +26,7 @@ import java.util.Locale;
 import static com.duy.compass.compass.Utility.getDirectionText;
 
 public class CanvasHelper {
+    private static final String TAG = "CanvasHelper";
     private final Paint mNumberTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mDirectionTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -32,11 +34,9 @@ public class CanvasHelper {
     private final Paint mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mSecondaryTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPrimaryTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     private final Path mPath = new Path();
     private final SensorValue mSensorValue = new SensorValue();
     private final float mMaxRadius = 430;
-
     /*Color*/
     @ColorInt
     private int mForegroundColor;
@@ -48,7 +48,6 @@ public class CanvasHelper {
     private int mSecondaryTextColor;
     @ColorInt
     private int mAccentColor;
-
     @NonNull
     private Context mContext;
     private Typeface mTypeface;
@@ -133,7 +132,6 @@ public class CanvasHelper {
         mPathPaint.setColor(mSecondaryTextColor);
         mPathPaint.setStyle(Style.STROKE);
         mPathPaint.setStrokeWidth(realPx(3));
-
         canvas.drawCircle(mCenter.x, mCenter.y, radius, mPathPaint);
 
         mPathPaint.setColor(mForegroundColor);
@@ -141,10 +139,9 @@ public class CanvasHelper {
         Paint.FontMetrics fm = mNumberTextPaint.getFontMetrics();
         float fontHeight = fm.bottom - fm.top + fm.leading;
 
-        float strokeWidth = 20 + fontHeight;
-        mPathPaint.setStrokeWidth(realPx(strokeWidth));
-
-        radius = realPx(350 - strokeWidth / 2.0f - mUnitPadding);
+        float strokeWidth = realPx(20) + fontHeight;
+        mPathPaint.setStrokeWidth(strokeWidth);
+        radius = realPx(350) - strokeWidth / 2.0f - realPx(mUnitPadding);
         canvas.drawCircle(mCenter.x, mCenter.y, radius, mPathPaint);
     }
 
@@ -205,7 +202,6 @@ public class CanvasHelper {
         drawText(canvas, 60, "mag.field", 445, mSecondaryTextPaint);
     }
 
-
     private void drawSunTime(Canvas canvas) {
         if (mSunshine == null) return;
         float sunRise = mSunshine.getSunrise();
@@ -255,7 +251,6 @@ public class CanvasHelper {
         canvas.drawText(str, x - mPrimaryTextPaint.measureText(str) / 2.0f, y, mPrimaryTextPaint);
     }
 
-
     private void drawClock(Canvas canvas) {
         canvas.save();
         canvas.rotate(-mSensorValue.getAzimuth(), mCenter.x, mCenter.y);
@@ -265,7 +260,6 @@ public class CanvasHelper {
         drawDirectionText(canvas);
         canvas.restore();
     }
-
 
     private void drawClock(Canvas canvas, Point center) {
         mPathPaint.setColor(mForegroundColor);
@@ -441,4 +435,8 @@ public class CanvasHelper {
         canvas.restore();
     }
 
+    public void onSizeChanged(int w, int h, int oldw, int oldh) {
+        DLog.d(TAG, "onSizeChanged() called with: w = [" + w + "], h = [" + h + "], oldw = [" + oldw + "], oldh = [" + oldh + "]");
+        mIsPaintCreated = false;
+    }
 }
