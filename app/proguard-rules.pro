@@ -20,15 +20,15 @@
 # duplicate the contents of this file and remove the include of this
 # file from your project's proguard.config path property.
 -keepattributes *Annotation*
-#-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
-#-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgent
 -keep public class * extends android.preference.Preference
-#-keep public class * extends android.support.v4.app.Fragment
-#-keep public class * extends android.app.Fragment
+-keep public class * extends android.support.v4.app.Fragment
+-keep public class * extends android.app.Fragment
 -keep public class com.android.vending.licensing.ILicensingService
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
 -keepclasseswithmembernames class * {
@@ -74,7 +74,9 @@
    public *;
 }
 
-
 -keep class com.android.vending.billing.** { *; }
 #-keep class aidl.util.** { *; }
 
+-dontwarn android.support.v4.**
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**
