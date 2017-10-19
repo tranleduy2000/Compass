@@ -76,7 +76,7 @@ public class WeatherManager {
         String weatherForecast = getWeatherForecastData(location.getLongitude(), location.getLatitude());
         try {
             return getSunTimeFromJson(weatherForecast);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

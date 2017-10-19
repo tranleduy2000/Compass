@@ -98,9 +98,11 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     }
 
     @Override
-    public void onUpdateSunTime(Sunshine sunshine) {
-        mTxtSunrise.setText(sunshine.getReadableSunriseTime());
-        mTxtSunset.setText(sunshine.getReadableSunsetTime());
+    public void onUpdateSunTime(@Nullable Sunshine sunshine) {
+        if (sunshine != null) {
+            mTxtSunrise.setText(sunshine.getReadableSunriseTime());
+            mTxtSunset.setText(sunshine.getReadableSunsetTime());
+        }
     }
 
     @Override

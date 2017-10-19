@@ -34,7 +34,6 @@ public class CanvasHelper {
     private float mPixelScale;
     private Point mCenter;
     private float mUnitPadding;
-    private float mDirectionTextSize = 60f;
     @Nullable
     private Path mClockPathSecondary = null;
     @Nullable
@@ -52,17 +51,14 @@ public class CanvasHelper {
         mPixelScale = ((float) Math.min(canvas.getWidth(), canvas.getHeight())) / 1000.0f;
         mCenter = new Point(canvas.getWidth() / 2, canvas.getHeight() / 2);
         mUnitPadding = realPx(5);
-        mDirectionTextSize = realPx(40f);
-
         initPaint();
 
         //draw background
-//        canvas.drawRGB(0, 0, 0);
         drawCircle(canvas);
         drawMagnetic(canvas);
         drawClock(canvas);
         drawValue(canvas);
-        drawSunTime(canvas);
+//        drawSunTime(canvas);
         drawPitchRoll(canvas);
     }
 
@@ -82,6 +78,7 @@ public class CanvasHelper {
         canvas.drawCircle(mCenter.x - x, mCenter.y + y, radius, mPathPaint);
 
         radius = realPx(length / 2);
+        mPath.reset();
         mPath.moveTo(mCenter.x - radius, mCenter.y);
         mPath.lineTo(mCenter.x + radius, mCenter.y);
         mPath.moveTo(mCenter.x, mCenter.y - radius);
@@ -96,18 +93,20 @@ public class CanvasHelper {
     private void drawMagnetic(Canvas canvas) {
         float step = realPx(450);
 
-        mPath.reset();
+
         mPathPaint.setStrokeWidth(realPx(25));
         mPathPaint.setColor(Color.GRAY);
 
         RectF bound = new RectF(mCenter.x - step, mCenter.y - step, mCenter.x + step, mCenter.y + step);
         int sweepAngle = 100;
+
+        mPath.reset();
         mPath.addArc(bound, 310, 100);
         canvas.drawPath(mPath, mPathPaint);
 
         float magneticField = mSensorValue.getMagneticField();
         int max = 160;
-        float percent = magneticField / max;
+        float percent = Math.min(1, magneticField / max);
         percent = percent * sweepAngle;
 
         mPath.reset();
@@ -142,13 +141,14 @@ public class CanvasHelper {
 
         int x = mCenter.x;
         int y = (int) (mCenter.y - realPx(430 + mUnitPadding * 2));
-        mPath.reset();
         int length = (int) realPx(30);
-        mPath.lineTo(x - length / 2, y - length);
-        mPath.lineTo(x + length / 2, y - length);
-        mPath.lineTo(x, y);
-        mPath.lineTo(x - length / 2, y - length);
-        canvas.drawPath(mPath, mPathPaint);
+
+//        mPath.reset();
+//        mPath.lineTo(x - length / 2.0f, y - length);
+//        mPath.lineTo(x + length / 2.0f, y - length);
+//        mPath.lineTo(x, y);
+//        mPath.lineTo(x - length / 2.0f, y - length);
+//        canvas.drawPath(mPath, mPathPaint);
 
         mPathPaint.setTextSize(realPx(80));
         mPathPaint.setColor(Color.WHITE);

@@ -8,16 +8,14 @@ import android.view.MotionEvent;
 
 public class CustomViewPager extends ViewPager {
 
-    private boolean isPagingEnabled;
+    private boolean isPagingEnabled = false;
 
     public CustomViewPager(Context context) {
         super(context);
-        this.isPagingEnabled = true;
     }
 
     public CustomViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.isPagingEnabled = true;
     }
 
     @Override

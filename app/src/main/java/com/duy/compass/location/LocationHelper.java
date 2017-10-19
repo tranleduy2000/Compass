@@ -88,8 +88,8 @@ public class LocationHelper {
     }
 
     public interface LocationValueListener {
-        void onUpdateAddressLine(String name);
+        void onUpdateAddressLine(@Nullable String name);
 
-        void onUpdateSunTime(Sunshine sunshine);
+        void onUpdateSunTime(@Nullable Sunshine sunshine);
     }
 }
