@@ -8,9 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 
 import com.duy.compass.fragments.CompassFragment;
-import com.duy.compass.fragments.CompassMapFragment;
-import com.duy.compass.fragments.SettingFragment;
-import com.duy.compass.fragments.WeatherFragment;
 import com.duy.compass.view.CustomViewPager;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,20 +21,20 @@ public class MainActivity extends AppCompatActivity {
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
-                return 4;
+                return 1;
             }
 
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
+//                    case 0:
+//                        return new WeatherFragment();
                     case 0:
-                        return new WeatherFragment();
-                    case 1:
                         return new CompassFragment();
-                    case 2:
-                        return new CompassMapFragment();
-                    case 3:
-                        return new SettingFragment();
+//                    case 2:
+//                        return new CompassMapFragment();
+//                    case 3:
+//                        return new SettingFragment();
                 }
                 return null;
             }

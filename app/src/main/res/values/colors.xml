@@ -3,5 +3,10 @@
     <color name="colorPrimary">#141318</color>
     <color name="colorPrimaryDark">#141318</color>
     <color name="colorAccent">#28ccf5</color>
-    <color name="window_background_color" >#2f2f37</color>
+    <color name="window_background_color">#2f2f37</color>
+    <color name="compass_foreground_color">#2f2f37</color>
+    <color name="compass_background_color">#1e1d23</color>
+    <color name="compass_text_secondary_color">#c0bfc5</color>
+    <color name="compass_text_primary_color">#ffffff</color>
+    <color name="compass_accent_color">#03a9f4</color>
 </resources>
