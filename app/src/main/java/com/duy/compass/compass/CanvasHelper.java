@@ -78,7 +78,7 @@ public class CanvasHelper {
         drawBackground(canvas);
         drawMagnetic(canvas);
         drawClock(canvas);
-        drawValue(canvas);
+        drawAzimuthValue(canvas);
         //drawSunTime(canvas);
         drawPitchRoll(canvas);
     }
@@ -121,14 +121,14 @@ public class CanvasHelper {
         float y = (float) (realPx(length) * cosR);
         canvas.drawCircle(mCenter.x - x, mCenter.y + y, radius, mPathPaint);
 
-        radius = realPx(length );
+        radius = realPx(length);
         mPath.reset();
         mPath.moveTo(mCenter.x - radius, mCenter.y);
         mPath.lineTo(mCenter.x + radius, mCenter.y);
         mPath.moveTo(mCenter.x, mCenter.y - radius);
         mPath.lineTo(mCenter.x, mCenter.y + radius);
 
-        mPathPaint.setColor(Color.WHITE);
+        mPathPaint.setColor(mSecondaryTextColor);
         mPathPaint.setStrokeWidth(realPx(3));
         mPathPaint.setStyle(Style.STROKE);
         canvas.drawPath(mPath, mPathPaint);
@@ -176,27 +176,40 @@ public class CanvasHelper {
         canvas.drawPath(mPath, mPathPaint);
     }
 
-    private void drawValue(Canvas canvas) {
+    private void drawAzimuthValue(Canvas canvas) {
         //draw triangle
-        mPathPaint.setStyle(Style.FILL);
-        mPathPaint.setColor(Color.WHITE);
-        mPathPaint.setStrokeWidth(realPx(3));
+
 
         int x = mCenter.x;
         int y = (int) (mCenter.y - realPx(430 + mUnitPadding * 2));
-        int length = (int) realPx(30);
+        float length = realPx(30);
 
         mPath.reset();
         mPath.lineTo(x - length / 2.0f, y - length);
         mPath.lineTo(x + length / 2.0f, y - length);
         mPath.lineTo(x, y);
         mPath.lineTo(x - length / 2.0f, y - length);
+
+        mPathPaint.setStyle(Style.FILL);
+        mPathPaint.setColor(Color.WHITE);
         canvas.drawPath(mPath, mPathPaint);
 
-        mPathPaint.setTextSize(realPx(80));
-        mPathPaint.setColor(Color.WHITE);
+        length = realPx(15);
+        y = (int) (mCenter.y - realPx(440 + mUnitPadding * 2));
+        mPath.reset();
+        mPath.lineTo(x - length / 2.0f, y - length);
+        mPath.lineTo(x + length / 2.0f, y - length);
+        mPath.lineTo(x, y);
+        mPath.lineTo(x - length / 2.0f, y - length);
+
+        mPathPaint.setStyle(Style.FILL);
+        mPathPaint.setColor(mAccentColor);
+        canvas.drawPath(mPath, mPathPaint);
+
+        mNumberTextPaint.setTextSize(realPx(80));
         String str = ((int) mSensorValue.getAzimuth()) + "° " + getDirectionText(mSensorValue.getAzimuth());
-        canvas.drawText(str, x - mPathPaint.measureText(str) / 2, y - length - realPx(10), mPathPaint);
+        canvas.drawText(str, x - mNumberTextPaint.measureText(str) / 2.0f,
+                y - length - realPx(mUnitPadding * 2), mNumberTextPaint);
     }
 
 
@@ -224,7 +237,6 @@ public class CanvasHelper {
 
         mPathPaint.setStrokeCap(Paint.Cap.ROUND);
     }
-
 
 
     private void drawClock(Canvas canvas) {
