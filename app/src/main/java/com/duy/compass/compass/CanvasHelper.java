@@ -87,10 +87,14 @@ public class CanvasHelper {
     }
 
     private void initPaint() {
-        if (mIsPaintCreated) return;
         mNumberTextPaint.setTextSize(realPx(30));
         mNumberTextPaint.setColor(mPrimaryTextColor);
         mNumberTextPaint.setTypeface(mTypeface);
+
+        //no need setup
+        if (mIsPaintCreated) {
+            return;
+        }
 
         mDirectionTextPaint.setTextSize(realPx(60));
         mDirectionTextPaint.setTypeface(mTypeface);
@@ -247,7 +251,7 @@ public class CanvasHelper {
 
         mPrimaryTextPaint.setTextSize(realPx(80));
         String str = ((int) mSensorValue.getAzimuth()) + "° " + getDirectionText(mSensorValue.getAzimuth());
-        y = y - length - realPx(mUnitPadding * 2);
+        y = y - length - realPx(mUnitPadding * 4);
         canvas.drawText(str, x - mPrimaryTextPaint.measureText(str) / 2.0f, y, mPrimaryTextPaint);
     }
 

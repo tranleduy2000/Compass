@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_gps_fixed_white_24dp" />
@@ -24,7 +24,9 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Long Xuyen An GIang - Viet Nam" />
+            android:paddingLeft="8dp"
+            android:text="Waiting for GPS signal..."
+            android:textColor="?android:textColorPrimary" />
     </LinearLayout>
 
 
@@ -42,20 +44,26 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:orientation="vertical"
+            android:padding="8dp"
             android:paddingLeft="16dp">
 
             <TextView
                 android:id="@+id/txt_pitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="X " /><!--pitch-->
+                android:text="X "
+                android:textStyle="bold"
+                android:typeface="monospace" /><!--pitch-->
 
             <TextView
                 android:id="@+id/txt_roll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Y " /><!--roll-->
+                android:text="Y "
+                android:textStyle="bold"
+                android:typeface="monospace" /><!--roll-->
         </LinearLayout>
 
     </FrameLayout>
@@ -87,7 +95,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="05:05h" />
+                android:text="..." />
         </LinearLayout>
 
         <LinearLayout
@@ -105,7 +113,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="05:05h" />
+                android:text="..." />
 
             <ImageView
                 android:layout_width="wrap_content"
