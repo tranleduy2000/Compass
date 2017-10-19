@@ -30,6 +30,8 @@ public class CanvasHelper {
     private final Paint mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mMagneticPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mSecondaryTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mPrimaryTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private final Path mPath = new Path();
     private final SensorValue mSensorValue = new SensorValue();
@@ -59,6 +61,7 @@ public class CanvasHelper {
     private Path mClockPathSecondary = null;
     @Nullable
     private Path mClockPathPrimary = null;
+    private boolean mIsPaintCreated = false;
 
     public CanvasHelper(@NonNull Context context) {
         this.mContext = context;
@@ -81,6 +84,41 @@ public class CanvasHelper {
         drawAzimuthValue(canvas);
         //drawSunTime(canvas);
         drawPitchRoll(canvas);
+    }
+
+    private void initPaint() {
+        if (mIsPaintCreated) return;
+        mNumberTextPaint.setTextSize(realPx(30));
+        mNumberTextPaint.setColor(mPrimaryTextColor);
+        mNumberTextPaint.setTypeface(mTypeface);
+
+        mDirectionTextPaint.setTextSize(realPx(60));
+        mDirectionTextPaint.setTypeface(mTypeface);
+
+        LinearGradient gradient = new LinearGradient(0, 0, 0, realPx(500),
+                new int[]{Color.GREEN, Color.GREEN, Color.RED, Color.RED}, null, Shader.TileMode.MIRROR);
+        mMagneticPaint.setShader(gradient);
+        mMagneticPaint.setStrokeWidth(realPx(25));
+        mMagneticPaint.setStyle(Style.STROKE);
+        mMagneticPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        mForegroundColor = ContextCompat.getColor(mContext, R.color.compass_foreground_color);
+        mBackgroundColor = ContextCompat.getColor(mContext, R.color.compass_background_color);
+        mPrimaryTextColor = ContextCompat.getColor(mContext, R.color.compass_text_primary_color);
+        mSecondaryTextColor = ContextCompat.getColor(mContext, R.color.compass_text_secondary_color);
+        mAccentColor = ContextCompat.getColor(mContext, R.color.compass_accent_color);
+
+        mBackgroundPaint.setColor(mBackgroundColor);
+        mBackgroundPaint.setStyle(Style.FILL);
+
+        mPathPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        mSecondaryTextPaint.setColor(mSecondaryTextColor);
+        mSecondaryTextPaint.setTypeface(mTypeface);
+
+        mPrimaryTextPaint.setColor(mPrimaryTextColor);
+        mPrimaryTextPaint.setTypeface(mTypeface);
+        mIsPaintCreated = true;
     }
 
     private void drawBackground(Canvas canvas) {
@@ -156,8 +194,11 @@ public class CanvasHelper {
         mPath.addArc(bound, 310 + sweepAngle - percent, percent);
         canvas.drawPath(mPath, mMagneticPaint);
 
-        drawText(canvas, 305, String.format(Locale.US, "%dμT", (int) mSensorValue.getMagneticField()), 445, 30);
-        drawText(canvas, 60, "mag.field", 445, 30);
+        mPrimaryTextPaint.setTextSize(realPx(30));
+        drawText(canvas, 303, String.format(Locale.US, "%dμT", (int) mSensorValue.getMagneticField()), 445, mPrimaryTextPaint);
+
+        mSecondaryTextPaint.setTextSize(realPx(30));
+        drawText(canvas, 60, "mag.field", 445, mSecondaryTextPaint);
     }
 
 
@@ -178,10 +219,8 @@ public class CanvasHelper {
 
     private void drawAzimuthValue(Canvas canvas) {
         //draw triangle
-
-
-        int x = mCenter.x;
-        int y = (int) (mCenter.y - realPx(430 + mUnitPadding * 2));
+        float x = mCenter.x;
+        float y = (int) (mCenter.y - realPx(430 + mUnitPadding * 2));
         float length = realPx(30);
 
         mPath.reset();
@@ -206,36 +245,10 @@ public class CanvasHelper {
         mPathPaint.setColor(mAccentColor);
         canvas.drawPath(mPath, mPathPaint);
 
-        mNumberTextPaint.setTextSize(realPx(80));
+        mPrimaryTextPaint.setTextSize(realPx(80));
         String str = ((int) mSensorValue.getAzimuth()) + "° " + getDirectionText(mSensorValue.getAzimuth());
-        canvas.drawText(str, x - mNumberTextPaint.measureText(str) / 2.0f,
-                y - length - realPx(mUnitPadding * 2), mNumberTextPaint);
-    }
-
-
-    private void initPaint() {
-        mNumberTextPaint.setTextSize(realPx(30));
-        mNumberTextPaint.setColor(mPrimaryTextColor);
-        mNumberTextPaint.setTypeface(mTypeface);
-
-        mDirectionTextPaint.setTextSize(realPx(60));
-        mDirectionTextPaint.setTypeface(mTypeface);
-
-        LinearGradient gradient = new LinearGradient(0, 0, 0, realPx(500), Color.GREEN, Color.RED, Shader.TileMode.MIRROR);
-        mMagneticPaint.setShader(gradient);
-        mMagneticPaint.setStrokeWidth(realPx(25));
-        mMagneticPaint.setStyle(Style.STROKE);
-        mMagneticPaint.setStrokeCap(Paint.Cap.ROUND);
-
-        mForegroundColor = ContextCompat.getColor(mContext, R.color.compass_foreground_color);
-        mBackgroundColor = ContextCompat.getColor(mContext, R.color.compass_background_color);
-        mPrimaryTextColor = ContextCompat.getColor(mContext, R.color.compass_text_primary_color);
-        mSecondaryTextColor = ContextCompat.getColor(mContext, R.color.compass_text_secondary_color);
-        mAccentColor = ContextCompat.getColor(mContext, R.color.compass_accent_color);
-        mBackgroundPaint.setColor(mBackgroundColor);
-        mBackgroundPaint.setStyle(Style.FILL);
-
-        mPathPaint.setStrokeCap(Paint.Cap.ROUND);
+        y = y - length - realPx(mUnitPadding * 2);
+        canvas.drawText(str, x - mPrimaryTextPaint.measureText(str) / 2.0f, y, mPrimaryTextPaint);
     }
 
 
@@ -321,8 +334,6 @@ public class CanvasHelper {
 
     private void drawNumber(Canvas canvas) {
         float radius = 330;
-
-
         drawNumber(canvas, 300.0f, "30", radius);
         drawNumber(canvas, 330.0f, "60", radius);
         drawNumber(canvas, 360.0f, "90", radius);
@@ -346,9 +357,6 @@ public class CanvasHelper {
         float x = (cos * realPx(radius)) + mCenter.x;
         float y = (sin * realPx(radius)) + mCenter.y;
 
-//        canvas.drawPoint(x, y, mNumberPaint);
-//        canvas.drawPoint(mCenter.x, mCenter.y, mNumberPaint);
-
         canvas.save();
 
         canvas.translate(x, y);
@@ -358,12 +366,7 @@ public class CanvasHelper {
         canvas.restore();
     }
 
-    private void drawText(Canvas canvas, float degree, String text, float radius, float size) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(realPx(size));
-        paint.setColor(Color.GRAY);
-        paint.setTypeface(mTypeface);
-
+    private void drawText(Canvas canvas, float degree, String text, float radius, Paint paint) {
         Paint.FontMetrics fm = paint.getFontMetrics();
         float height = fm.bottom - fm.top + fm.leading;
 
