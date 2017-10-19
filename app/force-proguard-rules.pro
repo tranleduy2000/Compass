@@ -75,6 +75,32 @@
 }
 
 
+#Math library
+-keep class org.apache.log4j.** { *; }
+-keep class org.slf4j.** { *; }
+-keep class org.matheclipse.** { *; }
+-keep class org.apfloat.** { *; }
+-keep class de.lab4inf.math.** { *; }
+-keep class cc.redberry.** { *; }
+-keep class jp.ac.kobe_u.cs.cream.** { *; }
+
+-keep class com.duy.lambda.** { *; }
+-keep class com.duy.stream.** { *; }
+-keep class com.duy.calc.casio.** { *; }
+
 -keep class com.android.vending.billing.** { *; }
 #-keep class aidl.util.** { *; }
+
+-dontwarn javax.**
+-dontwarn java.beans.**
+-dontwarn java.lang.management.**
+-dontwarn de.lab4inf.math.**
+-dontwarn com.google.common.**
+-dontwarn java.lang.ClassValue
+-dontwarn java.rmi.MarshalledObject
+-dontwarn net.minidev.**
+-dontwarn com.madrobot.**
+-dontwarn sun.misc.**
+-dontwarn org.apache.log4j.**
+-dontwarn org.cheffo.jeplite.**
 
