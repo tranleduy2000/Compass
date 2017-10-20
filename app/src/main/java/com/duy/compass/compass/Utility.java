@@ -1,5 +1,7 @@
 package com.duy.compass.compass;
 
+import java.util.Locale;
+
 /**
  * Created by Duy on 10/16/2017.
  */
@@ -34,4 +36,10 @@ public class Utility {
         return "";
     }
 
+    public static String formatDms(float decimal) {
+        long d = (long) decimal;
+        long m = (long) ((decimal - d) * 60);
+        float s = (decimal - d - m / 60) * 3600;
+        return String.format(Locale.US, "%d°%d'%.2f\"", d, m, s);
+    }
 }

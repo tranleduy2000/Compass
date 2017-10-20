@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.duy.compass.compass.AccelerometerCompassHelper;
+import com.duy.compass.compass.AccelerometerDrawer;
 import com.duy.compass.model.SensorValue;
 
 /**
@@ -27,7 +27,7 @@ public class AccelerometerView extends View {
         }
     };
 
-    private AccelerometerCompassHelper mHelper;
+    private AccelerometerDrawer mHelper;
     private boolean mIsPortrait;
 
     public AccelerometerView(Context context) {
@@ -49,7 +49,7 @@ public class AccelerometerView extends View {
     private void init(Context context) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
-        mHelper = new AccelerometerCompassHelper(context);
+        mHelper = new AccelerometerDrawer(context);
 
     }
 

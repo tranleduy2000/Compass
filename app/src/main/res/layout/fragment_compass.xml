@@ -47,7 +47,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="bottom"
             android:orientation="vertical"
             android:padding="8dp"
             android:paddingLeft="16dp">
@@ -74,20 +74,102 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_gravity="bottom"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_location_on_white_24dp" />
+
+            <TextView
+                android:id="@+id/txt_speed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_location_on_white_24dp" />
+
+            <TextView
+                android:id="@+id/txt_lon_lat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_location_on_white_24dp" />
+
+            <TextView
+                android:id="@+id/txt_altitude"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom">
 
         <TextView
             android:id="@+id/txt_sunrise"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:clickable="true"
             android:drawableLeft="@drawable/ic_sunrise"
             android:drawableStart="@drawable/ic_sunrise"
             android:ellipsize="end"
+            android:foreground="?selectableItemBackground"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
             android:text="..." />
 
         <com.duy.compass.compass.view.AccelerometerView
@@ -101,11 +183,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:clickable="true"
             android:drawableEnd="@drawable/ic_sunset"
             android:drawableRight="@drawable/ic_sunset"
             android:ellipsize="end"
+            android:foreground="?selectableItemBackground"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
             android:text="..." />
 
     </LinearLayout>

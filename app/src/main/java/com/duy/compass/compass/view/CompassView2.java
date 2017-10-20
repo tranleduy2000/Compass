@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.duy.compass.compass.CompassCanvasHelper;
+import com.duy.compass.compass.CompassDrawer;
 import com.duy.compass.model.SensorValue;
 
 /**
@@ -26,7 +26,7 @@ public class CompassView2 extends View {
         }
     };
 
-    private CompassCanvasHelper mCompassCanvasHelper;
+    private CompassDrawer mCompassDrawer;
     private boolean mIsPortrait;
 
     public CompassView2(Context context) {
@@ -48,7 +48,7 @@ public class CompassView2 extends View {
     private void init(Context context) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
-        mCompassCanvasHelper = new CompassCanvasHelper(context);
+        mCompassDrawer = new CompassDrawer(context);
 
     }
 
@@ -92,16 +92,16 @@ public class CompassView2 extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mCompassCanvasHelper.onSizeChanged(w, h, oldw, oldh);
+        mCompassDrawer.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mCompassCanvasHelper.draw(canvas);
+        mCompassDrawer.draw(canvas);
     }
 
     public SensorValue getSensorValue() {
-        return mCompassCanvasHelper.getSensorValue();
+        return mCompassDrawer.getSensorValue();
     }
 }

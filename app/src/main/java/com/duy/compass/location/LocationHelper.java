@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -13,8 +14,9 @@ import android.support.v4.content.ContextCompat;
 import com.duy.compass.DLog;
 import com.duy.compass.model.Sunshine;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
  * Created by Duy on 10/16/2017.
@@ -43,10 +45,9 @@ public class LocationHelper {
             mLocationListener = new LocationListener(mActivity);
             mLocationListener.setLocationValueListener(mLocationValueListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
-
-            FusedLocationProviderClient fusedLocationProviderClient =
-                    LocationServices.getFusedLocationProviderClient(mActivity);
-            fusedLocationProviderClient.getLastLocation()
+            FusedLocationProviderClient fusedLocationProviderClient = getFusedLocationProviderClient(mActivity);
+            fusedLocationProviderClient
+                    .getLastLocation()
                     .addOnSuccessListener(mActivity, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
@@ -88,7 +89,7 @@ public class LocationHelper {
     }
 
     public interface LocationValueListener {
-        void onUpdateAddressLine(@Nullable String name);
+        void onUpdateLocation(Location location, @Nullable Address name);
 
         void onUpdateSunTime(@Nullable Sunshine sunshine);
     }

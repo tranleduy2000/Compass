@@ -54,8 +54,7 @@ public class LocationListener implements android.location.LocationListener {
                 addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 if (addresses.size() > 0) {
                     Address address = addresses.get(0);
-                    cityName = address.getAddressLine(0);
-                    mLocationValueListener.onUpdateAddressLine(cityName);
+                    mLocationValueListener.onUpdateLocation(location, address);
                 }
                 DLog.d(TAG, "onLocationChanged: " + addresses);
             } catch (IOException e) {
@@ -66,7 +65,6 @@ public class LocationListener implements android.location.LocationListener {
             }
             mFetchWeatherTask = new FetchWeatherTask(mLocationValueListener, mContext);
             mFetchWeatherTask.execute(location);
-
 
             final GregorianCalendar dateTime = new GregorianCalendar();
             AzimuthZenithAngle position = SPA.calculateSolarPosition(

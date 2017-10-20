@@ -26,7 +26,7 @@ import java.util.Locale;
 
 import static com.duy.compass.compass.Utility.getDirectionText;
 
-public class CompassCanvasHelper {
+public class CompassDrawer {
     private static final String TAG = "CanvasHelper";
     private final Paint mNumberTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mDirectionTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -63,7 +63,7 @@ public class CompassCanvasHelper {
     private Path mClockPathPrimary = null;
     private boolean mIsPaintCreated = false;
 
-    public CompassCanvasHelper(@NonNull Context context) {
+    public CompassDrawer(@NonNull Context context) {
         this.mContext = context;
         this.mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
     }
@@ -193,8 +193,8 @@ public class CompassCanvasHelper {
     private void drawAzimuthValue(Canvas canvas) {
         //draw triangle
         float x = mCenter.x;
-        float y = (int) (mCenter.y - realPx(430 + mUnitPadding * 2));
         float length = realPx(30);
+        float y = (mCenter.y - realPx(mMaxRadius) + length / 2.0f);
 
         mPath.reset();
         mPath.lineTo(x - length / 2.0f, y - length);
@@ -204,10 +204,15 @@ public class CompassCanvasHelper {
 
         mPathPaint.setStyle(Style.FILL);
         mPathPaint.setColor(Color.WHITE);
-        canvas.drawPath(mPath, mPathPaint);
+        mPathPaint.setShadowLayer(realPx(4), 0, 0, Color.RED);
 
-        length = realPx(15);
-        y = (int) (mCenter.y - realPx(440 + mUnitPadding * 2));
+        canvas.drawPath(mPath, mPathPaint);
+        mPathPaint.reset();
+        mPathPaint.setAntiAlias(true);
+        mPathPaint.setStrokeCap(Paint.Cap.ROUND);
+
+        length = realPx(16);
+        y = (mCenter.y - realPx(mMaxRadius) + length / 2.0f);
         mPath.reset();
         mPath.lineTo(x - length / 2.0f, y - length);
         mPath.lineTo(x + length / 2.0f, y - length);

@@ -2,6 +2,7 @@ package com.duy.compass.compass;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -17,7 +18,7 @@ import com.duy.compass.model.SensorValue;
  * Created by Duy on 10/20/2017.
  */
 
-public class AccelerometerCompassHelper {
+public class AccelerometerDrawer {
     private static final String TAG = "AccelerometerCompassHel";
     private final Paint mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final SensorValue mSensorValue = new SensorValue();
@@ -40,7 +41,7 @@ public class AccelerometerCompassHelper {
     private Point mCenter;
     private float mUnitPadding;
 
-    public AccelerometerCompassHelper(@NonNull Context context) {
+    public AccelerometerDrawer(@NonNull Context context) {
         this.mContext = context;
     }
 
@@ -81,8 +82,9 @@ public class AccelerometerCompassHelper {
     }
 
     private void drawPitchRoll(Canvas canvas) {
-        int length = 450;
-        float radius = realPx(length);
+        int length = 470;
+        float maxRadius = realPx(length);
+        float radius = maxRadius;
 
         mPathPaint.setColor(mBackgroundColor);
         mPathPaint.setStyle(Paint.Style.FILL);
@@ -93,15 +95,14 @@ public class AccelerometerCompassHelper {
         float roll = mSensorValue.getRoll();
         float pitch = mSensorValue.getPitch();
 
-        radius = realPx(100);
-
+        int targetRadius = 100;
         float cosP = (float) Math.cos(Math.toRadians(pitch - 90));
-        float x = (float) (realPx(length) * cosP);
+        float x = realPx(length - targetRadius) * cosP;
         float cosR = (float) Math.cos(Math.toRadians(roll - 90));
-        float y = (float) (realPx(length) * cosR);
-        canvas.drawCircle(mCenter.x - x, mCenter.y + y, radius, mPathPaint);
+        float y = realPx(length - targetRadius) * cosR;
+        canvas.drawCircle(mCenter.x - x, mCenter.y + y, realPx(targetRadius), mPathPaint);
 
-        radius = realPx(length);
+        radius = maxRadius;
         mPath.reset();
         mPath.moveTo(mCenter.x - radius, mCenter.y);
         mPath.lineTo(mCenter.x + radius, mCenter.y);
@@ -109,6 +110,7 @@ public class AccelerometerCompassHelper {
         mPath.lineTo(mCenter.x, mCenter.y + radius);
         mPath.addCircle(mCenter.x, mCenter.y, radius, Path.Direction.CCW);
 
+        mPathPaint.setShadowLayer(realPx(3), 0, 0, Color.BLACK);
         mPathPaint.setColor(mSecondaryTextColor);
         mPathPaint.setStrokeWidth(realPx(5));
         mPathPaint.setStyle(Paint.Style.STROKE);
