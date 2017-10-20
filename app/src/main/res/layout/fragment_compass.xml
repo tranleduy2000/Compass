@@ -27,6 +27,7 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="Waiting for GPS signal..."
             android:textColor="?android:textColorPrimary" />
     </LinearLayout>
@@ -38,9 +39,9 @@
         android:layout_weight="1"
         tools:context="com.duy.compass.MainActivity">
 
-        <FrameLayout
-            android:id="@+id/content"
-            android:layout_width="match_parent"
+        <com.duy.compass.compass.view.CompassView2
+            android:id="@+id/compass_view"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
         <LinearLayout
@@ -70,62 +71,43 @@
 
     </FrameLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_gravity="bottom"
-        android:paddingBottom="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_sunrise"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_sunrise"
+            android:drawableStart="@drawable/ic_sunrise"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="..." />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:src="@drawable/ic_sunrise" />
+        <com.duy.compass.compass.view.AccelerometerView
+            android:id="@+id/accelerometer_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/txt_sunrise"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:text="..." />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/txt_sunset"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_sunset"
+            android:drawableRight="@drawable/ic_sunset"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="..." />
 
-            <TextView
-                android:id="@+id/txt_sunset"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:text="..." />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:src="@drawable/ic_sunset" />
-
-        </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

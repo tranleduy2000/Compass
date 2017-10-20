@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import static com.duy.compass.compass.Utility.getDirectionText;
 
-public class CanvasHelper {
+public class CompassCanvasHelper {
     private static final String TAG = "CanvasHelper";
     private final Paint mNumberTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mDirectionTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -62,7 +62,7 @@ public class CanvasHelper {
     private Path mClockPathPrimary = null;
     private boolean mIsPaintCreated = false;
 
-    public CanvasHelper(@NonNull Context context) {
+    public CompassCanvasHelper(@NonNull Context context) {
         this.mContext = context;
         this.mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
     }
@@ -82,7 +82,6 @@ public class CanvasHelper {
         drawClock(canvas);
         drawAzimuthValue(canvas);
         //drawSunTime(canvas);
-        drawPitchRoll(canvas);
     }
 
     private void initPaint() {
@@ -145,33 +144,6 @@ public class CanvasHelper {
         canvas.drawCircle(mCenter.x, mCenter.y, radius, mPathPaint);
     }
 
-    private void drawPitchRoll(Canvas canvas) {
-        mPathPaint.setColor(mPrimaryTextColor);
-        mPathPaint.setStyle(Style.FILL);
-        float roll = mSensorValue.getRoll();
-        float pitch = mSensorValue.getPitch();
-
-        float radius = realPx(20);
-
-        float cosP = (float) Math.cos(Math.toRadians(pitch - 90));
-        int length = 100;
-        float x = (float) (realPx(length) * cosP);
-        float cosR = (float) Math.cos(Math.toRadians(roll - 90));
-        float y = (float) (realPx(length) * cosR);
-        canvas.drawCircle(mCenter.x - x, mCenter.y + y, radius, mPathPaint);
-
-        radius = realPx(length);
-        mPath.reset();
-        mPath.moveTo(mCenter.x - radius, mCenter.y);
-        mPath.lineTo(mCenter.x + radius, mCenter.y);
-        mPath.moveTo(mCenter.x, mCenter.y - radius);
-        mPath.lineTo(mCenter.x, mCenter.y + radius);
-
-        mPathPaint.setColor(mSecondaryTextColor);
-        mPathPaint.setStrokeWidth(realPx(3));
-        mPathPaint.setStyle(Style.STROKE);
-        canvas.drawPath(mPath, mPathPaint);
-    }
 
     private void drawMagnetic(Canvas canvas) {
         float step = realPx(450);
@@ -247,7 +219,7 @@ public class CanvasHelper {
 
         mPrimaryTextPaint.setTextSize(realPx(80));
         String str = ((int) mSensorValue.getAzimuth()) + "° " + getDirectionText(mSensorValue.getAzimuth());
-        y = y - length - realPx(mUnitPadding * 4);
+        y = mCenter.y ;
         canvas.drawText(str, x - mPrimaryTextPaint.measureText(str) / 2.0f, y, mPrimaryTextPaint);
     }
 

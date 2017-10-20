@@ -4,16 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.duy.compass.R;
+import com.duy.compass.compass.view.AccelerometerView;
 import com.duy.compass.compass.view.CompassView2;
 import com.duy.compass.location.LocationHelper;
 import com.duy.compass.model.Sunshine;
 import com.duy.compass.sensor.SensorListener;
 
 import java.util.Locale;
+
+import static com.duy.compass.compass.Utility.getDirectionText;
 
 /**
  * Created by Duy on 10/17/2017.
@@ -25,6 +27,7 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     private TextView mTxtAddress, mTxtSunrise, mTxtSunset, mTxtPitch, mTxtRoll;
     private LocationHelper mLocationHelper;
     private CompassView2 mCompassView;
+    private AccelerometerView mAccelerometerView;
     private SensorListener mSensorListener;
 
     public static CompassFragment newInstance() {
@@ -36,12 +39,10 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         return fragment;
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        createMainView();
         bindView();
 
         mLocationHelper = new LocationHelper(getActivity());
@@ -52,21 +53,15 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         mSensorListener.setOnValueChangedListener(this);
     }
 
-
     private void bindView() {
         mTxtAddress = (TextView) findViewById(R.id.txt_address);
         mTxtSunrise = (TextView) findViewById(R.id.txt_sunrise);
         mTxtSunset = (TextView) findViewById(R.id.txt_sunset);
         mTxtRoll = (TextView) findViewById(R.id.txt_roll);
         mTxtPitch = (TextView) findViewById(R.id.txt_pitch);
-    }
 
-    private void createMainView() {
-        ViewGroup content = (ViewGroup) findViewById(R.id.content);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        mCompassView = new CompassView2(getContext());
-        content.addView(mCompassView, params);
+        mCompassView = (CompassView2) findViewById(R.id.compass_view);
+        mAccelerometerView = (AccelerometerView) findViewById(R.id.accelerometer_view);
     }
 
     @Override
@@ -107,7 +102,9 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
     @Override
     public void onRotationChanged(float azimuth, float roll, float pitch) {
+        String str = ((int) azimuth) + "° " + getDirectionText(azimuth);
         mCompassView.getSensorValue().setRotation(azimuth, roll, pitch);
+        mAccelerometerView.getSensorValue().setRotation(azimuth, roll, pitch);
         mTxtRoll.setText(String.format(Locale.US, "Y %.1f°", roll));
         mTxtPitch.setText(String.format(Locale.US, "X %.1f°", pitch));
     }

@@ -8,14 +8,15 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.duy.compass.compass.CompassCanvasHelper;
+import com.duy.compass.compass.AccelerometerCompassHelper;
 import com.duy.compass.model.SensorValue;
 
 /**
- * Created by Duy on 10/15/2017.
+ * Created by Duy on 10/20/2017.
  */
 
-public class CompassView2 extends View {
+public class AccelerometerView extends View {
+
     private final Handler mHandler = new Handler();
     private final Runnable mDraw = new Runnable() {
         @Override
@@ -26,21 +27,21 @@ public class CompassView2 extends View {
         }
     };
 
-    private CompassCanvasHelper mCompassCanvasHelper;
+    private AccelerometerCompassHelper mHelper;
     private boolean mIsPortrait;
 
-    public CompassView2(Context context) {
+    public AccelerometerView(Context context) {
         super(context);
         init(context);
     }
 
-    public CompassView2(Context context, @Nullable AttributeSet attrs) {
+    public AccelerometerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
 
-    public CompassView2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public AccelerometerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -48,7 +49,7 @@ public class CompassView2 extends View {
     private void init(Context context) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         this.mIsPortrait = ((float) displayMetrics.heightPixels) / ((float) displayMetrics.widthPixels) > 1.4f;
-        mCompassCanvasHelper = new CompassCanvasHelper(context);
+        mHelper = new AccelerometerCompassHelper(context);
 
     }
 
@@ -92,16 +93,16 @@ public class CompassView2 extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mCompassCanvasHelper.onSizeChanged(w, h, oldw, oldh);
+        mHelper.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mCompassCanvasHelper.draw(canvas);
+        mHelper.draw(canvas);
     }
 
     public SensorValue getSensorValue() {
-        return mCompassCanvasHelper.getSensorValue();
+        return mHelper.getSensorValue();
     }
 }
