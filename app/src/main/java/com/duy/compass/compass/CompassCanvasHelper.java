@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -217,10 +218,14 @@ public class CompassCanvasHelper {
         mPathPaint.setColor(mAccentColor);
         canvas.drawPath(mPath, mPathPaint);
 
+
         mPrimaryTextPaint.setTextSize(realPx(80));
         String str = ((int) mSensorValue.getAzimuth()) + "° " + getDirectionText(mSensorValue.getAzimuth());
-        y = mCenter.y ;
-        canvas.drawText(str, x - mPrimaryTextPaint.measureText(str) / 2.0f, y, mPrimaryTextPaint);
+        Rect rectF = new Rect();
+        mPrimaryTextPaint.getTextBounds(str, 0, str.length(), rectF);
+        y = mCenter.y + rectF.height() / 2.0f;
+        x = mCenter.x - mPrimaryTextPaint.measureText(str) / 2.0f;
+        canvas.drawText(str, x, y, mPrimaryTextPaint);
     }
 
     private void drawClock(Canvas canvas) {
