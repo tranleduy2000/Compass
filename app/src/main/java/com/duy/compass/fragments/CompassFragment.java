@@ -61,8 +61,8 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         mTxtAddress = (TextView) findViewById(R.id.txt_address);
         mTxtSunrise = (TextView) findViewById(R.id.txt_sunrise);
         mTxtSunset = (TextView) findViewById(R.id.txt_sunset);
-        mTxtRoll = (TextView) findViewById(R.id.txt_roll);
-        mTxtPitch = (TextView) findViewById(R.id.txt_pitch);
+//        mTxtRoll = (TextView) findViewById(R.id.txt_roll);
+//        mTxtPitch = (TextView) findViewById(R.id.txt_pitch);
         mTxtLonLat = (TextView) findViewById(R.id.txt_lon_lat);
         mTxtAltitude = (TextView) findViewById(R.id.txt_altitude);
         mTxtSpeed = (TextView) findViewById(R.id.txt_speed);
