@@ -124,8 +124,8 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         String str = ((int) azimuth) + "° " + getDirectionText(azimuth);
         mCompassView.getSensorValue().setRotation(azimuth, roll, pitch);
         mAccelerometerView.getSensorValue().setRotation(azimuth, roll, pitch);
-        mTxtRoll.setText(String.format(Locale.US, "Y %.1f°", roll));
-        mTxtPitch.setText(String.format(Locale.US, "X %.1f°", pitch));
+//        mTxtRoll.setText(String.format(Locale.US, "Y %.1f°", roll));
+//        mTxtPitch.setText(String.format(Locale.US, "X %.1f°", pitch));
     }
 
     @Override
