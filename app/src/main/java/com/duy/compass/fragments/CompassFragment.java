@@ -59,6 +59,8 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
     private void bindView() {
         mTxtAddress = (TextView) findViewById(R.id.txt_address);
+        mTxtAddress.setSelected(true);
+
         mTxtSunrise = (TextView) findViewById(R.id.txt_sunrise);
         mTxtSunset = (TextView) findViewById(R.id.txt_sunset);
 //        mTxtRoll = (TextView) findViewById(R.id.txt_roll);

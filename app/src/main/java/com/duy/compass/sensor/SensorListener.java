@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.annotation.Nullable;
 
+import com.duy.compass.DLog;
+
 /**
  * Created by Duy on 10/15/2017.
  */
@@ -92,6 +94,7 @@ public class SensorListener implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        DLog.d(TAG, "onAccuracyChanged() called with: sensor = [" + sensor + "], accuracy = [" + accuracy + "]");
     }
 
     public interface OnValueChangedListener {

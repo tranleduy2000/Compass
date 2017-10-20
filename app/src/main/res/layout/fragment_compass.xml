@@ -5,32 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+
+    <com.duy.compass.view.RobotoTextView
+        android:id="@+id/txt_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_gps_fixed_white_24dp" />
-
-        <TextView
-            android:id="@+id/txt_address"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="Waiting for GPS signal..."
-            android:textColor="?android:textColorPrimary" />
-    </LinearLayout>
+        android:layout_gravity="center_vertical"
+        android:drawableLeft="@drawable/ic_gps_fixed_white_24dp"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_gps_fixed_white_24dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="Waiting for GPS signal..."
+        android:textColor="?android:textColorPrimary" />
 
 
     <FrameLayout
@@ -45,28 +39,28 @@
             android:layout_height="match_parent" />
 
         <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:orientation="vertical"-->
-            <!--android:padding="8dp"-->
-            <!--android:paddingLeft="16dp">-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="8dp"-->
+        <!--android:paddingLeft="16dp">-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/txt_pitch"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="X "-->
-                <!--android:textStyle="bold"-->
-                <!--android:typeface="monospace" />&lt;!&ndash;pitch&ndash;&gt;-->
+        <!--<com.duy.compass.view.RobotoTextView-->
+        <!--android:id="@+id/txt_pitch"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="X "-->
+        <!--android:textStyle="bold"-->
+        <!--android:typeface="monospace" />&lt;!&ndash;pitch&ndash;&gt;-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/txt_roll"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Y "-->
-                <!--android:textStyle="bold"-->
-                <!--android:typeface="monospace" />&lt;!&ndash;roll&ndash;&gt;-->
+        <!--<com.duy.compass.view.RobotoTextView-->
+        <!--android:id="@+id/txt_roll"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Y "-->
+        <!--android:textStyle="bold"-->
+        <!--android:typeface="monospace" />&lt;!&ndash;roll&ndash;&gt;-->
         <!--</LinearLayout>-->
 
     </FrameLayout>
@@ -87,12 +81,16 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_location_on_white_24dp" />
+            <com.duy.compass.view.RobotoTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_gps_fixed_white_24dp"
+                android:gravity="center"
+                android:text="SPEED"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold" />
 
-            <TextView
+            <com.duy.compass.view.RobotoTextView
                 android:id="@+id/txt_speed"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -111,12 +109,17 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_location_on_white_24dp" />
+            <com.duy.compass.view.RobotoTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_location_on_white_24dp"
+                android:gravity="center"
+                android:text="LOCATION"
 
-            <TextView
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold" />
+
+            <com.duy.compass.view.RobotoTextView
                 android:id="@+id/txt_lon_lat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -136,12 +139,17 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_location_on_white_24dp" />
+            <com.duy.compass.view.RobotoTextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_gps_fixed_white_24dp"
+                android:gravity="center"
+                android:text="ALTITUDE"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold" />
 
-            <TextView
+            <com.duy.compass.view.RobotoTextView
                 android:id="@+id/txt_altitude"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -157,7 +165,7 @@
         android:layout_height="100dp"
         android:layout_gravity="bottom">
 
-        <TextView
+        <com.duy.compass.view.RobotoTextView
             android:id="@+id/txt_sunrise"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -179,7 +187,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <TextView
+        <com.duy.compass.view.RobotoTextView
             android:id="@+id/txt_sunset"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

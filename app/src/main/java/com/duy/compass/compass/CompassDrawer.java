@@ -65,7 +65,7 @@ public class CompassDrawer {
 
     public CompassDrawer(@NonNull Context context) {
         this.mContext = context;
-        this.mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
+        this.mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
     }
 
     public SensorValue getSensorValue() {
@@ -203,7 +203,7 @@ public class CompassDrawer {
         mPath.lineTo(x - length / 2.0f, y - length);
 
         mPathPaint.setStyle(Style.FILL);
-        mPathPaint.setColor(Color.WHITE);
+        mPathPaint.setColor(mAccentColor);
         mPathPaint.setShadowLayer(realPx(4), 0, 0, Color.RED);
 
         canvas.drawPath(mPath, mPathPaint);
@@ -211,17 +211,17 @@ public class CompassDrawer {
         mPathPaint.setAntiAlias(true);
         mPathPaint.setStrokeCap(Paint.Cap.ROUND);
 
-        length = realPx(16);
-        y = (mCenter.y - realPx(mMaxRadius) + length / 2.0f);
-        mPath.reset();
-        mPath.lineTo(x - length / 2.0f, y - length);
-        mPath.lineTo(x + length / 2.0f, y - length);
-        mPath.lineTo(x, y);
-        mPath.lineTo(x - length / 2.0f, y - length);
-
-        mPathPaint.setStyle(Style.FILL);
-        mPathPaint.setColor(mAccentColor);
-        canvas.drawPath(mPath, mPathPaint);
+//        length = realPx(16);
+//        y = (mCenter.y - realPx(mMaxRadius) + length / 2.0f);
+//        mPath.reset();
+//        mPath.lineTo(x - length / 2.0f, y - length);
+//        mPath.lineTo(x + length / 2.0f, y - length);
+//        mPath.lineTo(x, y);
+//        mPath.lineTo(x - length / 2.0f, y - length);
+//
+//        mPathPaint.setStyle(Style.FILL);
+//        mPathPaint.setColor(mAccentColor);
+//        canvas.drawPath(mPath, mPathPaint);
 
 
         mPrimaryTextPaint.setTextSize(realPx(80));
