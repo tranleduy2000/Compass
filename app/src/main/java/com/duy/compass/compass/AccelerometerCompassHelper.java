@@ -81,15 +81,21 @@ public class AccelerometerCompassHelper {
     }
 
     private void drawPitchRoll(Canvas canvas) {
+        int length = 450;
+        float radius = realPx(length);
+
+        mPathPaint.setColor(mBackgroundColor);
+        mPathPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(mCenter.x, mCenter.y, radius, mPathPaint);
+
         mPathPaint.setColor(mPrimaryTextColor);
         mPathPaint.setStyle(Paint.Style.FILL);
         float roll = mSensorValue.getRoll();
         float pitch = mSensorValue.getPitch();
 
-        float radius = realPx(20);
+        radius = realPx(100);
 
         float cosP = (float) Math.cos(Math.toRadians(pitch - 90));
-        int length = 100;
         float x = (float) (realPx(length) * cosP);
         float cosR = (float) Math.cos(Math.toRadians(roll - 90));
         float y = (float) (realPx(length) * cosR);
@@ -101,11 +107,13 @@ public class AccelerometerCompassHelper {
         mPath.lineTo(mCenter.x + radius, mCenter.y);
         mPath.moveTo(mCenter.x, mCenter.y - radius);
         mPath.lineTo(mCenter.x, mCenter.y + radius);
+        mPath.addCircle(mCenter.x, mCenter.y, radius, Path.Direction.CCW);
 
         mPathPaint.setColor(mSecondaryTextColor);
-        mPathPaint.setStrokeWidth(realPx(3));
+        mPathPaint.setStrokeWidth(realPx(5));
         mPathPaint.setStyle(Paint.Style.STROKE);
         canvas.drawPath(mPath, mPathPaint);
+
     }
 
     public void onSizeChanged(int w, int h, int oldw, int oldh) {
