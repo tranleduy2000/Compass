@@ -11,8 +11,9 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
-import com.duy.compass.util.DLog;
 import com.duy.compass.model.WeatherData;
+import com.duy.compass.util.DLog;
+import com.duy.compass.util.Utility;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -30,6 +31,7 @@ public class LocationHelper {
     private LocationListener mLocationListener;
     @Nullable
     private LocationValueListener mLocationValueListener;
+    private boolean mIsCreated = false;
 
     public LocationHelper(Activity context) {
         this.mActivity = context;
@@ -37,27 +39,29 @@ public class LocationHelper {
 
     @SuppressWarnings("MissingPermission")
     public void onCreate() {
+        DLog.d(TAG, "onCreate() called");
+        if (mIsCreated) return;
         if (permissionGranted()) {
-            DLog.d(TAG, "onCreate() called");
+            if (!Utility.isNetworkAvailable(mActivity)) {
+                return;
+            }
 
-            LocationManager locationManager =
-                    (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
             mLocationListener = new LocationListener(mActivity);
             mLocationListener.setLocationValueListener(mLocationValueListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
-            FusedLocationProviderClient fusedLocationProviderClient = getFusedLocationProviderClient(mActivity);
-            fusedLocationProviderClient
-                    .getLastLocation()
-                    .addOnSuccessListener(mActivity, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // Logic to handle location object
-                                mLocationListener.onLocationChanged(location);
-                            }
-                        }
-                    });
+            FusedLocationProviderClient client = getFusedLocationProviderClient(mActivity);
+            client.getLastLocation().addOnSuccessListener(mActivity, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        mLocationListener.onLocationChanged(location);
+                    }
+                }
+            });
+            mIsCreated = true;
         } else {
             requestPermission();
         }
@@ -86,6 +90,10 @@ public class LocationHelper {
         if (mLocationListener != null) {
             mLocationListener.setLocationValueListener(locationValueListener);
         }
+    }
+
+    public void networkUnavailable() {
+        this.mIsCreated = false;
     }
 
     public interface LocationValueListener {

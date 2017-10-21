@@ -1,17 +1,22 @@
 package com.duy.compass.fragments;
 
+import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Location;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.duy.compass.R;
 import com.duy.compass.compass.view.AccelerometerView;
 import com.duy.compass.compass.view.CompassView2;
+import com.duy.compass.connect.NetworkStateReceiver;
+import com.duy.compass.connect.NetworkStateReceiverListener;
 import com.duy.compass.location.LocationHelper;
 import com.duy.compass.model.Sunshine;
 import com.duy.compass.model.WeatherData;
@@ -28,7 +33,7 @@ import static com.duy.compass.util.Utility.getDirectionText;
  */
 
 public class CompassFragment extends BaseFragment implements SensorListener.OnValueChangedListener,
-        LocationHelper.LocationValueListener {
+        LocationHelper.LocationValueListener, NetworkStateReceiverListener {
     public static final String TAG = "CompassFragment";
     private TextView mTxtAddress;
     private TextView mTxtSunrise, mTxtSunset;
@@ -40,6 +45,7 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     private CompassView2 mCompassView;
     private AccelerometerView mAccelerometerView;
     private SensorListener mSensorListener;
+    private NetworkStateReceiver mNetworkStateReceiver;
 
     public static CompassFragment newInstance() {
 
@@ -48,6 +54,23 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         CompassFragment fragment = new CompassFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getContext().registerReceiver(mNetworkStateReceiver, filter);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        mNetworkStateReceiver.removeListener(this);
+        getContext().unregisterReceiver(mNetworkStateReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -62,6 +85,10 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
         mSensorListener = new SensorListener(getContext());
         mSensorListener.setOnValueChangedListener(this);
+
+        if (!Utility.isNetworkAvailable(getContext())) {
+            Toast.makeText(getContext(), "No internet access", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void bindView() {
@@ -155,5 +182,15 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     @Override
     public int getLayout() {
         return R.layout.fragment_compass;
+    }
+
+    @Override
+    public void networkAvailable() {
+        mLocationHelper.onCreate();
+    }
+
+    @Override
+    public void networkUnavailable() {
+        mLocationHelper.networkUnavailable();
     }
 }

@@ -1,15 +1,15 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/window_background_color</item>
-
-        <item name="android:fontFamily">serif-serif-light</item>
-        <item name="android:statusBarColor">@color/window_background_color</item>
     </style>
+
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="BaseAppTheme" />
 
 </resources>

@@ -1,7 +1,10 @@
 package com.duy.compass.util;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 
 import com.duy.compass.R;
 
@@ -90,5 +93,12 @@ public class Utility {
 
     public static String formatTemperature(Context context, float temp) {
         return String.format(Locale.US, "%.0f°F", temp);
+    }
+
+    public static boolean isNetworkAvailable(@NonNull Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
