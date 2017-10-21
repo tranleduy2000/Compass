@@ -10,9 +10,9 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
-import com.duy.compass.util.DLog;
 import com.duy.compass.R;
 import com.duy.compass.model.SensorValue;
+import com.duy.compass.util.DLog;
 
 /**
  * Created by Duy on 10/20/2017.
@@ -95,12 +95,11 @@ public class AccelerometerDrawer {
         float roll = mSensorValue.getRoll();
         float pitch = mSensorValue.getPitch();
 
-        int targetRadius = 100;
-        float cosP = (float) Math.cos(Math.toRadians(pitch - 90));
-        float x = realPx(length - targetRadius) * cosP;
-        float cosR = (float) Math.cos(Math.toRadians(roll - 90));
-        float y = realPx(length - targetRadius) * cosR;
-        canvas.drawCircle(mCenter.x - x, mCenter.y + y, realPx(targetRadius), mPathPaint);
+        float cosP = (float) Math.cos(Math.toRadians(90 - pitch));
+        float x = realPx(370) * cosP;
+        float cosR = (float) Math.cos(Math.toRadians(90 - roll));
+        float y = realPx(370) * cosR;
+        canvas.drawCircle(mCenter.x - x, mCenter.y + y, realPx(100), mPathPaint);
 
         radius = maxRadius;
         mPath.reset();

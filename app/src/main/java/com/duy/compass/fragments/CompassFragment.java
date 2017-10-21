@@ -172,6 +172,7 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         String str = ((int) azimuth) + "° " + getDirectionText(azimuth);
         mCompassView.getSensorValue().setRotation(azimuth, roll, pitch);
         mAccelerometerView.getSensorValue().setRotation(azimuth, roll, pitch);
+
     }
 
     @Override

@@ -32,7 +32,7 @@ public class SensorValue {
      * @return roll value in angle
      */
     public float getRoll() {
-        return roll;
+        return (roll);
     }
 
     public void setRoll(float roll) {
@@ -40,11 +40,15 @@ public class SensorValue {
     }
 
     public float getPitch() {
-        return pitch;
+        return (pitch);
     }
 
     public void setPitch(float pitch) {
         this.pitch = pitch;
+    }
+
+    public float getRawPitch() {
+        return pitch;
     }
 
     /**
