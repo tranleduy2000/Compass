@@ -1,5 +1,8 @@
 package com.duy.compass.util;
 
+import android.content.Context;
+import android.support.annotation.DrawableRes;
+
 import com.duy.compass.R;
 
 import java.util.Locale;
@@ -9,6 +12,8 @@ import java.util.Locale;
  */
 
 public class Utility {
+    private static final String TAG = "Utility";
+
     public static String getDirectionText(float degree) {
         final float step = 22.5f;
         if (degree >= 0 && degree < step || degree > 360 - step) {
@@ -52,7 +57,9 @@ public class Utility {
      * @param weatherId from OpenWeatherMap API response
      * @return resource id for the corresponding icon. -1 if no relation is found.
      */
+    @DrawableRes
     public static int getIconResourceForWeatherCondition(int weatherId) {
+        DLog.d(TAG, "getIconResourceForWeatherCondition() called with: weatherId = [" + weatherId + "]");
         // Based on weather code data found at:
         // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
         if (weatherId >= 200 && weatherId <= 232) {
@@ -81,4 +88,7 @@ public class Utility {
         return -1;
     }
 
+    public static String formatTemperature(Context context, float temp) {
+        return String.format(Locale.US, "%.0f°F", temp);
+    }
 }

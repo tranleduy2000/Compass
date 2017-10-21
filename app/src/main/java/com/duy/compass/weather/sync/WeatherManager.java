@@ -12,6 +12,7 @@ import com.duy.compass.model.Sunshine;
 import com.duy.compass.model.WeatherData;
 import com.duy.compass.util.DLog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -151,7 +152,7 @@ public class WeatherManager {
             double lon = location.getLongitude();
             String weatherForecast = getWeatherForecastData(lon, lat);
             return getWeatherDataFromJson(weatherForecast);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -171,17 +172,23 @@ public class WeatherManager {
         JSONObject mainData = forecastJson.getJSONObject("main");
 
         WeatherData weatherData = new WeatherData();
-        weatherData.setId(forecastJson.getInt("id"));
         weatherData.setTemp((float) mainData.getDouble("temp"));
         weatherData.setTempMax((float) mainData.getDouble("temp_max"));
         weatherData.setTempMin((float) mainData.getDouble("temp_min"));
         weatherData.setHumidity((float) mainData.getDouble("humidity"));
         weatherData.setPressure((float) mainData.getDouble("pressure"));
+
         JSONObject sysJson = forecastJson.getJSONObject("sys");
         long sunrise = sysJson.getLong("sunrise");
         long sunset = sysJson.getLong("sunset");
         Sunshine sunshine = new Sunshine(sunset * 1000, sunrise * 1000);
         weatherData.setSunshine(sunshine);
+
+
+        JSONArray weatherArray = forecastJson.getJSONArray("weather");
+        JSONObject weatherObject = weatherArray.getJSONObject(0);
+        int id = weatherObject.getInt("id");
+        weatherData.setId(id);
 
         return weatherData;
     }

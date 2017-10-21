@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.duy.compass.R;
@@ -29,8 +30,12 @@ import static com.duy.compass.util.Utility.getDirectionText;
 public class CompassFragment extends BaseFragment implements SensorListener.OnValueChangedListener,
         LocationHelper.LocationValueListener {
     public static final String TAG = "CompassFragment";
-    private TextView mTxtAddress, mTxtSunrise, mTxtSunset, mTxtPitch, mTxtRoll, mTxtLonLat,
-            mTxtAltitude, mTxtSpeed;
+    private TextView mTxtAddress;
+    private TextView mTxtSunrise, mTxtSunset;
+    private TextView mTxtPitch, mTxtRoll;
+    private TextView mTxtLonLat, mTxtAltitude;
+    private TextView mTxtPressure, mTxtHumidity, mTxtTemp;
+    private ImageView mImgWeather;
     private LocationHelper mLocationHelper;
     private CompassView2 mCompassView;
     private AccelerometerView mAccelerometerView;
@@ -65,13 +70,17 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
         mTxtSunrise = (TextView) findViewById(R.id.txt_sunrise);
         mTxtSunset = (TextView) findViewById(R.id.txt_sunset);
-//        mTxtRoll = (TextView) findViewById(R.id.txt_roll);
-//        mTxtPitch = (TextView) findViewById(R.id.txt_pitch);
+
         mTxtLonLat = (TextView) findViewById(R.id.txt_lon_lat);
         mTxtAltitude = (TextView) findViewById(R.id.txt_altitude);
-        mTxtSpeed = (TextView) findViewById(R.id.txt_speed);
+
         mCompassView = (CompassView2) findViewById(R.id.compass_view);
         mAccelerometerView = (AccelerometerView) findViewById(R.id.accelerometer_view);
+
+        mTxtPressure = (TextView) findViewById(R.id.txt_pressure);
+        mTxtHumidity = (TextView) findViewById(R.id.txt_humidity);
+        mImgWeather = (ImageView) findViewById(R.id.img_weather);
+        mTxtTemp = (TextView) findViewById(R.id.txt_temp);
     }
 
     @Override
@@ -109,9 +118,8 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         }
         if (location != null) {
             double altitude = location.getAltitude();
-            mTxtAltitude.setText(String.format(Locale.US, "%d", (long) altitude));
+            mTxtAltitude.setText(String.format(Locale.US, "%d m", (long) altitude));
             float speed = location.getSpeed();
-            mTxtSpeed.setText(String.format(Locale.US, "%.2f", speed));
         }
     }
 
@@ -124,6 +132,11 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
                 mTxtSunrise.setText(sunshine.getReadableSunriseTime());
                 mTxtSunset.setText(sunshine.getReadableSunsetTime());
             }
+            int resId = Utility.getIconResourceForWeatherCondition(weatherData.getId());
+            if (resId != -1) mImgWeather.setImageResource(resId);
+            mTxtPressure.setText(String.format(Locale.US, "%s hPa", weatherData.getPressure()));
+            mTxtHumidity.setText(String.format(Locale.US, "%s %%", weatherData.getHumidity()));
+            mTxtTemp.setText(Utility.formatTemperature(getContext(), weatherData.getTemp()));
         }
     }
 
@@ -132,8 +145,6 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         String str = ((int) azimuth) + "° " + getDirectionText(azimuth);
         mCompassView.getSensorValue().setRotation(azimuth, roll, pitch);
         mAccelerometerView.getSensorValue().setRotation(azimuth, roll, pitch);
-//        mTxtRoll.setText(String.format(Locale.US, "Y %.1f°", roll));
-//        mTxtPitch.setText(String.format(Locale.US, "X %.1f°", pitch));
     }
 
     @Override
