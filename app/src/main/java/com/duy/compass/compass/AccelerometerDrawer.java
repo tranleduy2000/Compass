@@ -10,7 +10,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
-import com.duy.compass.DLog;
+import com.duy.compass.util.DLog;
 import com.duy.compass.R;
 import com.duy.compass.model.SensorValue;
 

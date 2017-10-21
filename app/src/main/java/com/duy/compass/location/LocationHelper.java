@@ -11,8 +11,8 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
-import com.duy.compass.DLog;
-import com.duy.compass.model.Sunshine;
+import com.duy.compass.util.DLog;
+import com.duy.compass.model.WeatherData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -91,6 +91,6 @@ public class LocationHelper {
     public interface LocationValueListener {
         void onUpdateLocation(Location location, @Nullable Address name);
 
-        void onUpdateSunTime(@Nullable Sunshine sunshine);
+        void onReceiveWeatherData(@Nullable WeatherData weatherData);
     }
 }

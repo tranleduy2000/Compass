@@ -9,16 +9,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.duy.compass.R;
-import com.duy.compass.compass.Utility;
 import com.duy.compass.compass.view.AccelerometerView;
 import com.duy.compass.compass.view.CompassView2;
 import com.duy.compass.location.LocationHelper;
 import com.duy.compass.model.Sunshine;
+import com.duy.compass.model.WeatherData;
 import com.duy.compass.sensor.SensorListener;
+import com.duy.compass.util.DLog;
+import com.duy.compass.util.Utility;
 
 import java.util.Locale;
 
-import static com.duy.compass.compass.Utility.getDirectionText;
+import static com.duy.compass.util.Utility.getDirectionText;
 
 /**
  * Created by Duy on 10/17/2017.
@@ -114,10 +116,14 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     }
 
     @Override
-    public void onUpdateSunTime(@Nullable Sunshine sunshine) {
-        if (sunshine != null) {
-            mTxtSunrise.setText(sunshine.getReadableSunriseTime());
-            mTxtSunset.setText(sunshine.getReadableSunsetTime());
+    public void onReceiveWeatherData(@Nullable WeatherData weatherData) {
+        DLog.d(TAG, "onReceiveWeatherData() called with: weatherData = [" + weatherData + "]");
+        if (weatherData != null) {
+            Sunshine sunshine = weatherData.getSunshine();
+            if (sunshine != null) {
+                mTxtSunrise.setText(sunshine.getReadableSunriseTime());
+                mTxtSunset.setText(sunshine.getReadableSunsetTime());
+            }
         }
     }
 

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.duy.compass.DLog;
+import com.duy.compass.util.DLog;
 import com.duy.compass.weather.sync.FetchWeatherTask;
 
 import net.e175.klaus.solarpositioning.AzimuthZenithAngle;

@@ -1,6 +1,5 @@
 package com.duy.compass.weather.sync;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
@@ -8,11 +7,11 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.duy.compass.DLog;
 import com.duy.compass.database.DatabaseHelper;
 import com.duy.compass.model.Sunshine;
+import com.duy.compass.model.WeatherData;
+import com.duy.compass.util.DLog;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Vector;
 
 /**
  * SyncAdapter
@@ -53,144 +51,7 @@ public class WeatherManager {
         this.mContext = context;
     }
 
-    public Context getContext() {
-        return mContext;
-    }
-
-    public Vector<ContentValues> getWeatherData(Location location) {
-        DLog.d(TAG, "getWeatherData() called with: location = [" + location + "]");
-
-        String weatherForecast = getWeatherForecastData(location.getLongitude(), location.getLatitude());
-        try {
-            return getWeatherDataFromJson(weatherForecast);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return new Vector<>();
-        }
-    }
-
-    @Nullable
-    public Sunshine getSunTime(Location location) {
-        DLog.d(TAG, "getWeatherData() called with: location = [" + location + "]");
-
-        String weatherForecast = getWeatherForecastData(location.getLongitude(), location.getLatitude());
-        try {
-            return getSunTimeFromJson(weatherForecast);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Take the String representing the complete forecast in JSON Format and
-     * pull out the data we need to construct the Strings needed for the wireframes.
-     * <p>
-     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-     * into an Object hierarchy for us.
-     */
-    private Vector<ContentValues> getWeatherDataFromJson(String forecastJsonStr)
-            throws JSONException {
-        DLog.d(TAG, "getWeatherDataFromJson() called with: forecastJsonStr = [" + forecastJsonStr + "]");
-
-        final String OWM_COORD = "coord";
-        final String OWM_COORD_LAT = "lat";
-        final String OWM_COORD_LONG = "lon";
-
-        // sys information
-        final String OWM_SYS = "sys";
-        final String OWM_COUNTRY = "country";
-        final String OHM_SUNRISE = "sunrise";
-        final String OWM_SUNSET = "sunset";
-
-        final String OWM_DATETIME = "dt";
-        final String OWM_PRESSURE = "pressure";
-        final String OWM_HUMIDITY = "humidity";
-        final String OWM_WINDSPEED = "speed";
-        final String OWM_WIND_DIRECTION = "deg";
-
-        // All temperatures are children of the "temp" object
-        final String OWM_MAIN_TEMP = "temp";
-        final String OWM_MAIN_TEMP_MAX = "temp_max";
-        final String OWM_MAIN_TEMP_MIN = "temp_min";
-
-        final String OWM_WEATHER = "weather";
-        final String OWM_DESCRIPTION = "main";
-        final String OWM_WEATHER_ID = "id";
-
-        JSONObject forecastJson = new JSONObject(forecastJsonStr);
-        JSONArray weatherArray = forecastJson.getJSONArray(OWM_WEATHER);
-
-//        JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
-//        String cityName = cityJson.getString(OWM_CITY_NAME);
-//        JSONObject coordJSON = cityJson.getJSONObject(OWM_COORD);
-//        double cityLatitude = coordJSON.getDouble(OWM_COORD_LAT);
-//        double cityLongitude = coordJSON.getDouble(OWM_COORD_LONG);
-
-
-        // Get and insert the new weather information into the database
-        Vector<ContentValues> cVVector = new Vector<>(weatherArray.length());
-
-//        for (int i = 0; i < weatherArray.length(); i++) {
-//            //  These are the values that will be collected
-//
-//            long dateTime;
-//            double pressure;
-//            int humidity;
-//            double windSpeed;
-//            double windDirection;
-//
-//            double high;
-//            double low;
-//
-//            String description;
-//            int weatherId;
-//
-//            // Get the JSON object representing the day
-//            JSONObject dayForecast = weatherArray.getJSONObject(i);
-//
-//            // The date/time is returned as a long.  We need to convert that
-//            // into something human-readable, since most people won't read "1400356800" as
-//            // "this saturday".
-//            dateTime = dayForecast.getLong(OWM_DATETIME);
-//
-//            pressure = dayForecast.getDouble(OWM_PRESSURE);
-//            humidity = dayForecast.getInt(OWM_HUMIDITY);
-//            windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
-//            windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
-//
-//            // description is in a child array called "weather", which is 1 element long.
-//            JSONObject weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-//            description = weatherObject.getString(OWM_DESCRIPTION);
-//            weatherId = weatherObject.getInt(OWM_WEATHER_ID);
-//
-//            // Temperatures are in a child object called "temp".  Try not to name variables
-//            // "temp" when working with temperature.  It confuses everybody.
-//            JSONObject temperatureObject = dayForecast.getJSONObject(OWM_MAIN_TEMP);
-//            high = temperatureObject.getDouble(OWM_MAIN_TEMP_MAX);
-//            low = temperatureObject.getDouble(OWM_MIN);
-//
-//            ContentValues weatherValues = new ContentValues();
-//
-////            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_LOC_KEY, locationID);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATETEXT, WeatherContract.getDbDateString(new Date(dateTime * 1000L)));
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_HUMIDITY, humidity);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_PRESSURE, pressure);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, windSpeed);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DEGREES, windDirection);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, high);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, low);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC, description);
-//            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, weatherId);
-//
-//            cVVector.add(weatherValues);
-//        }
-        /** Insert weather data into database */
-//        mDatabaseHelper.insertWeatherIntoDatabase(cVVector);
-        return cVVector;
-    }
-
-    private Sunshine getSunTimeFromJson(String forecastJsonStr) throws JSONException {
+    public static Sunshine getSunTimeFromJson(String forecastJsonStr) throws JSONException {
         DLog.d(TAG, "getSunTimeFromJson() called with: forecastJsonStr = [" + forecastJsonStr + "]");
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
@@ -200,7 +61,7 @@ public class WeatherManager {
         return new Sunshine(sunset * 1000, sunrise * 1000);
     }
 
-    private String getWeatherForecastData(double lon, double lat) {
+    public static String getWeatherForecastData(double lon, double lat) {
         //These two need to be declared outside the try/catch
         //so that they can be closed in the finally block
         HttpURLConnection urlConnection = null;
@@ -280,6 +141,53 @@ public class WeatherManager {
         }
 
         return forecastJsonStr;
+    }
+
+    @Nullable
+    public static WeatherData getWeatherData(Location location) {
+        DLog.d(TAG, "getWeatherData() called with: location = [" + location + "]");
+        try {
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            String weatherForecast = getWeatherForecastData(lon, lat);
+            return getWeatherDataFromJson(weatherForecast);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Take the String representing the complete forecast in JSON Format and
+     * pull out the data we need to construct the Strings needed for the wireframes.
+     * <p>
+     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
+     * into an Object hierarchy for us.
+     */
+    private static WeatherData getWeatherDataFromJson(String forecastJsonStr)
+            throws JSONException {
+        DLog.d(TAG, "getWeatherDataFromJson() called with: forecastJsonStr = [" + forecastJsonStr + "]");
+
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONObject mainData = forecastJson.getJSONObject("main");
+
+        WeatherData weatherData = new WeatherData();
+        weatherData.setId(forecastJson.getInt("id"));
+        weatherData.setTemp((float) mainData.getDouble("temp"));
+        weatherData.setTempMax((float) mainData.getDouble("temp_max"));
+        weatherData.setTempMin((float) mainData.getDouble("temp_min"));
+        weatherData.setHumidity((float) mainData.getDouble("humidity"));
+        weatherData.setPressure((float) mainData.getDouble("pressure"));
+        JSONObject sysJson = forecastJson.getJSONObject("sys");
+        long sunrise = sysJson.getLong("sunrise");
+        long sunset = sysJson.getLong("sunset");
+        Sunshine sunshine = new Sunshine(sunset * 1000, sunrise * 1000);
+        weatherData.setSunshine(sunshine);
+
+        return weatherData;
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
 }

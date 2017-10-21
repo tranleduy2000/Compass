@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.annotation.Nullable;
 
-import com.duy.compass.DLog;
+import com.duy.compass.util.DLog;
 
 /**
  * Created by Duy on 10/15/2017.

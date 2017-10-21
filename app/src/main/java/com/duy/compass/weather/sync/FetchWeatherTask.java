@@ -5,13 +5,13 @@ import android.location.Location;
 import android.os.AsyncTask;
 
 import com.duy.compass.location.LocationHelper;
-import com.duy.compass.model.Sunshine;
+import com.duy.compass.model.WeatherData;
 
 /**
  * Created by Duy on 10/16/2017.
  */
 
-public class FetchWeatherTask extends AsyncTask<Location, Object, Sunshine> {
+public class FetchWeatherTask extends AsyncTask<Location, Object, WeatherData> {
     private LocationHelper.LocationValueListener mLocationValueListener;
     private Context context;
 
@@ -21,16 +21,13 @@ public class FetchWeatherTask extends AsyncTask<Location, Object, Sunshine> {
     }
 
     @Override
-    protected Sunshine doInBackground(Location... params) {
-        WeatherManager weatherManager = new WeatherManager(context);
-        Sunshine sunshine = weatherManager.getSunTime(params[0]);
-        System.out.println("sunTime = " + sunshine);
-        return sunshine;
+    protected WeatherData doInBackground(Location... params) {
+        return WeatherManager.getWeatherData(params[0]);
     }
 
     @Override
-    protected void onPostExecute(Sunshine sunshine) {
-        super.onPostExecute(sunshine);
-        mLocationValueListener.onUpdateSunTime(sunshine);
+    protected void onPostExecute(WeatherData weatherData) {
+        super.onPostExecute(weatherData);
+        mLocationValueListener.onReceiveWeatherData(weatherData);
     }
 }
