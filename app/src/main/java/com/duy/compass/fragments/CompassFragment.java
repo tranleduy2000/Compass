@@ -79,7 +79,7 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
         bindView();
 
-        mLocationHelper = new LocationHelper(getActivity());
+        mLocationHelper = new LocationHelper( this);
         mLocationHelper.setLocationValueListener(this);
         mLocationHelper.onCreate();
 
