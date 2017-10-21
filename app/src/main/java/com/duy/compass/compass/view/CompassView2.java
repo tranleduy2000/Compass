@@ -104,4 +104,6 @@ public class CompassView2 extends View {
     public SensorValue getSensorValue() {
         return mCompassDrawer.getSensorValue();
     }
+
+
 }

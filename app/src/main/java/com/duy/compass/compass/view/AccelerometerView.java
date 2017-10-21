@@ -23,7 +23,7 @@ public class AccelerometerView extends View {
         public void run() {
             invalidate();
             mHandler.removeCallbacks(this);
-            mHandler.postDelayed(this, 1000 / 60);
+            mHandler.postDelayed(this, 1000 / 30);
         }
     };
 
