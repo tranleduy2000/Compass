@@ -65,100 +65,118 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:weightSum="3">
+        android:stretchColumns="*">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:foreground="?selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_location_on_white_24dp" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_location_on_white_24dp" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_altitude_white" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <com.duy.compass.view.RobotoTextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_gps_fixed_white_24dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="SPEED"
                 android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <com.duy.compass.view.RobotoTextView
-                android:id="@+id/txt_speed"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:typeface="monospace" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:foreground="?selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.duy.compass.view.RobotoTextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_location_on_white_24dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="LOCATION"
-
                 android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
             <com.duy.compass.view.RobotoTextView
-                android:id="@+id/txt_lon_lat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:typeface="monospace" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:foreground="?selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.duy.compass.view.RobotoTextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_gps_fixed_white_24dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="ALTITUDE"
                 android:textColor="?android:textColorPrimary"
                 android:textStyle="bold" />
 
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+
             <com.duy.compass.view.RobotoTextView
-                android:id="@+id/txt_altitude"
-                android:layout_width="match_parent"
+                android:id="@+id/txt_speed"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:typeface="monospace" />
 
+
+            <com.duy.compass.view.RobotoTextView
+                android:id="@+id/txt_lon_lat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+
+            <com.duy.compass.view.RobotoTextView
+                android:id="@+id/txt_altitude"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:typeface="monospace" />
         </LinearLayout>
-    </LinearLayout>
+    </TableLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

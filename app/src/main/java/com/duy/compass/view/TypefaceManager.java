@@ -9,8 +9,7 @@ import java.util.HashMap;
 /**
  * Created by Duy on 10/20/2017.
  */
-
-class TypefaceManager {
+public class TypefaceManager {
     private static HashMap<String, Typeface> mCache = new HashMap<>();
 
     @Nullable
@@ -20,7 +19,6 @@ class TypefaceManager {
             Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/" + name);
             mCache.put(name, typeface);
         } catch (Exception e) {
-
         }
         return mCache.get(name);
     }

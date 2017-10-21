@@ -21,6 +21,7 @@ import com.duy.compass.DLog;
 import com.duy.compass.R;
 import com.duy.compass.model.SensorValue;
 import com.duy.compass.model.Sunshine;
+import com.duy.compass.view.TypefaceManager;
 
 import java.util.Locale;
 
@@ -65,7 +66,7 @@ public class CompassDrawer {
 
     public CompassDrawer(@NonNull Context context) {
         this.mContext = context;
-        this.mTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
+        this.mTypeface = TypefaceManager.get(context, "Roboto-Light.ttf");
     }
 
     public SensorValue getSensorValue() {
