@@ -9,11 +9,17 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
+import com.duy.compass.R;
 import com.duy.compass.fragments.CompassFragment;
 import com.duy.compass.model.WeatherData;
 import com.duy.compass.util.DLog;
 import com.duy.compass.util.Utility;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 /**
  * Created by Duy on 10/16/2017.
@@ -28,38 +34,34 @@ public class LocationHelper {
     private LocationListener mLocationListener;
     @Nullable
     private LocationValueListener mLocationValueListener;
-    private boolean mIsCreated = false;
 
     public LocationHelper(CompassFragment fragment) {
-        this.mContext = mFragment.getContext();
-        this.mFragment = mFragment;
+        this.mContext = fragment.getContext();
+        this.mFragment = fragment;
     }
 
     @SuppressWarnings("MissingPermission")
     public void onCreate() {
         DLog.d(TAG, "onCreate() called");
-        if (mIsCreated) return;
         if (permissionGranted()) {
             if (!Utility.isNetworkAvailable(mContext)) {
                 return;
             }
-
             LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             mLocationListener = new LocationListener(mContext);
             mLocationListener.setLocationValueListener(mLocationValueListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, mLocationListener);
-//            FusedLocationProviderClient client = getFusedLocationProviderClient(mActivity);
-//            client.getLastLocation().addOnSuccessListener(mActivity, new OnSuccessListener<Location>() {
-//                @Override
-//                public void onSuccess(Location location) {
-//                    // Got last known location. In some rare situations this can be null.
-//                    if (location != null) {
-//                        // Logic to handle location object
-//                        mLocationListener.onLocationChanged(location);
-//                    }
-//                }
-//            });
-            mIsCreated = true;
+            FusedLocationProviderClient client = getFusedLocationProviderClient(mContext);
+            client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        mLocationListener.onLocationChanged(location);
+                    }
+                }
+            });
         } else {
             requestPermission();
         }
@@ -80,7 +82,13 @@ public class LocationHelper {
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        onCreate();
+        if (grantResults[0] != PackageManager.PERMISSION_GRANTED
+                || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+            /*requestPermission();*/
+            Toast.makeText(mContext, R.string.permission_denide, Toast.LENGTH_SHORT).show();
+        } else {
+            onCreate();
+        }
     }
 
     public void setLocationValueListener(LocationValueListener locationValueListener) {
@@ -91,7 +99,7 @@ public class LocationHelper {
     }
 
     public void networkUnavailable() {
-        this.mIsCreated = false;
+
     }
 
     public interface LocationValueListener {

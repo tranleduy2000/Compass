@@ -1,9 +1,7 @@
 package com.duy.compass.fragments;
 
-import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Location;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 import com.duy.compass.R;
 import com.duy.compass.compass.view.AccelerometerView;
 import com.duy.compass.compass.view.CompassView2;
-import com.duy.compass.connect.NetworkStateReceiver;
 import com.duy.compass.connect.NetworkStateReceiverListener;
 import com.duy.compass.location.LocationHelper;
 import com.duy.compass.model.Sunshine;
@@ -45,7 +42,7 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     private CompassView2 mCompassView;
     private AccelerometerView mAccelerometerView;
     private SensorListener mSensorListener;
-    private NetworkStateReceiver mNetworkStateReceiver;
+//    private NetworkStateReceiver mNetworkStateReceiver;
 
     public static CompassFragment newInstance() {
 
@@ -59,17 +56,17 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNetworkStateReceiver = new NetworkStateReceiver();
-        mNetworkStateReceiver.addListener(this);
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        getContext().registerReceiver(mNetworkStateReceiver, filter);
+//        mNetworkStateReceiver = new NetworkStateReceiver();
+//        mNetworkStateReceiver.addListener(this);
+//        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+//        getContext().registerReceiver(mNetworkStateReceiver, filter);
 
     }
 
     @Override
     public void onDestroy() {
-        mNetworkStateReceiver.removeListener(this);
-        getContext().unregisterReceiver(mNetworkStateReceiver);
+//        mNetworkStateReceiver.removeListener(this);
+//        getContext().unregisterReceiver(mNetworkStateReceiver);
         super.onDestroy();
     }
 

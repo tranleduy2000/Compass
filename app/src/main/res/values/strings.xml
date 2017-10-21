@@ -42,4 +42,5 @@
     <string name="weather">Weather</string>
 
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false"></string>
+    <string name="permission_denide">Permission denide. Please enable read location permission</string>
 </resources>
