@@ -1,10 +1,16 @@
 package com.duy.compass.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +38,7 @@ import static com.duy.compass.util.Utility.getDirectionText;
 public class CompassFragment extends BaseFragment implements SensorListener.OnValueChangedListener,
         LocationHelper.LocationValueListener, NetworkStateReceiverListener {
     public static final String TAG = "CompassFragment";
+    private static final int REQUEST_ENABLE_GPS = 1002;
     private TextView mTxtAddress;
     private TextView mTxtSunrise, mTxtSunset;
     private TextView mTxtPitch, mTxtRoll;
@@ -42,7 +49,6 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     private CompassView2 mCompassView;
     private AccelerometerView mAccelerometerView;
     private SensorListener mSensorListener;
-//    private NetworkStateReceiver mNetworkStateReceiver;
 
     public static CompassFragment newInstance() {
 
@@ -54,29 +60,12 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        mNetworkStateReceiver = new NetworkStateReceiver();
-//        mNetworkStateReceiver.addListener(this);
-//        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-//        getContext().registerReceiver(mNetworkStateReceiver, filter);
-
-    }
-
-    @Override
-    public void onDestroy() {
-//        mNetworkStateReceiver.removeListener(this);
-//        getContext().unregisterReceiver(mNetworkStateReceiver);
-        super.onDestroy();
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         bindView();
 
-        mLocationHelper = new LocationHelper( this);
+        mLocationHelper = new LocationHelper(this);
         mLocationHelper.setLocationValueListener(this);
         mLocationHelper.onCreate();
 
@@ -85,6 +74,12 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
         if (!Utility.isNetworkAvailable(getContext())) {
             Toast.makeText(getContext(), "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            LocationManager manager = (LocationManager) getContext()
+                    .getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                buildAlertMessageNoGps();
+            }
         }
     }
 
@@ -190,5 +185,38 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     @Override
     public void networkUnavailable() {
         mLocationHelper.networkUnavailable();
+    }
+
+
+    //https://stackoverflow.com/questions/39336461/how-can-i-enable-or-disable-the-gps-programmatically-on-android-6-x
+    private void buildAlertMessageNoGps() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, REQUEST_ENABLE_GPS);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+         AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        DLog.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+
+        switch (requestCode) {
+            case REQUEST_ENABLE_GPS:
+                mLocationHelper.onCreate();
+                break;
+        }
     }
 }
