@@ -41,10 +41,10 @@ public class LocationListener implements android.location.LocationListener {
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(@Nullable Location location) {
         DLog.d(TAG, "onLocationChanged() called with: location = [" + location + "]");
 
-        if (mLocationValueListener != null) {
+        if (mLocationValueListener != null && location != null) {
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());

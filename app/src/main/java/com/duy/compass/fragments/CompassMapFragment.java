@@ -18,7 +18,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class CompassMapFragment extends BaseFragment implements OnMapReadyCallback {
 
-
     private GoogleMap mMap;
 
     @Override
