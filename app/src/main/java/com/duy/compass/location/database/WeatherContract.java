@@ -1,4 +1,4 @@
-package com.duy.compass.weather.database;
+package com.duy.compass.location.database;
 
 import android.content.ContentUris;
 import android.net.Uri;

@@ -20,7 +20,7 @@ import android.support.v4.content.ContextCompat;
 import com.duy.compass.utils.DLog;
 import com.duy.compass.R;
 import com.duy.compass.sensor.model.SensorValue;
-import com.duy.compass.weather.model.Sunshine;
+import com.duy.compass.location.model.Sunshine;
 import com.duy.compass.utils.TypefaceManager;
 
 import java.util.Locale;

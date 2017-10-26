@@ -1,4 +1,4 @@
-package com.duy.compass.weather.model;
+package com.duy.compass.location.model;
 
 /**
  * Created by Duy on 10/21/2017.

@@ -1,4 +1,4 @@
-package com.duy.compass.weather;
+package com.duy.compass.location;
 
 import android.content.Context;
 import android.location.Address;
@@ -6,8 +6,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 
-import com.duy.compass.location.LocationHelper;
-import com.duy.compass.weather.model.LocationData;
+import com.duy.compass.location.model.LocationData;
 
 import java.util.List;
 import java.util.Locale;
@@ -16,12 +15,12 @@ import java.util.Locale;
  * Created by Duy on 10/16/2017.
  */
 
-public class LoadLocationDataTask extends AsyncTask<Location, Object, LocationData> {
+public class GetDataTask extends AsyncTask<Location, Object, LocationData> {
     private static final String TAG = "LoadLocationDataTask";
     private LocationHelper.LocationDataChangeListener mLocationValueListener;
     private Context mContext;
 
-    public LoadLocationDataTask(LocationHelper.LocationDataChangeListener listener, Context context) {
+    public GetDataTask(LocationHelper.LocationDataChangeListener listener, Context context) {
         this.mLocationValueListener = listener;
         this.mContext = context;
     }

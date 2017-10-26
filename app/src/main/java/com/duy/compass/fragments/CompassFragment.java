@@ -20,9 +20,9 @@ import com.duy.compass.sensor.SensorListener;
 import com.duy.compass.sensor.view.AccelerometerView;
 import com.duy.compass.sensor.view.CompassView2;
 import com.duy.compass.utils.Utility;
-import com.duy.compass.weather.database.CompassPref;
-import com.duy.compass.weather.model.LocationData;
-import com.duy.compass.weather.model.Sunshine;
+import com.duy.compass.location.database.CompassPref;
+import com.duy.compass.location.model.LocationData;
+import com.duy.compass.location.model.Sunshine;
 
 import java.util.Locale;
 

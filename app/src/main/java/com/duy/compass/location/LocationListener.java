@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.duy.compass.utils.DLog;
-import com.duy.compass.weather.LoadLocationDataTask;
 
 /**
  * Created by Duy on 10/16/2017.
@@ -19,7 +18,7 @@ public class LocationListener implements android.location.LocationListener {
     private Context mContext;
     @Nullable
     private LocationHelper.LocationDataChangeListener mLocationValueListener;
-    private LoadLocationDataTask mLoadLocationData;
+    private GetDataTask mLoadLocationData;
 
     public LocationListener(@NonNull Context context) {
         this.mContext = context;
@@ -36,7 +35,7 @@ public class LocationListener implements android.location.LocationListener {
             if (mLoadLocationData != null) {
                 mLoadLocationData.cancel(true);
             }
-            mLoadLocationData = new LoadLocationDataTask(mLocationValueListener, mContext);
+            mLoadLocationData = new GetDataTask(mLocationValueListener, mContext);
             mLoadLocationData.execute(location);
         }
     }

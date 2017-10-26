@@ -1,4 +1,4 @@
-package com.duy.compass.weather.database;
+package com.duy.compass.location.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,8 +6,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.duy.compass.weather.model.LocationData;
-import com.duy.compass.weather.model.Sunshine;
+import com.duy.compass.location.model.LocationData;
+import com.duy.compass.location.model.Sunshine;
 
 /**
  * Created by Duy on 10/26/2017.

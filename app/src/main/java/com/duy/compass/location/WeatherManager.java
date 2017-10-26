@@ -1,4 +1,4 @@
-package com.duy.compass.weather;
+package com.duy.compass.location;
 
 import android.content.Context;
 import android.location.Location;
@@ -7,8 +7,8 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.duy.compass.weather.model.Sunshine;
-import com.duy.compass.weather.model.LocationData;
+import com.duy.compass.location.model.Sunshine;
+import com.duy.compass.location.model.LocationData;
 import com.duy.compass.utils.DLog;
 
 import org.json.JSONArray;
