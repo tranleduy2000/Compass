@@ -7,8 +7,8 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.duy.compass.location.model.Sunshine;
 import com.duy.compass.location.model.LocationData;
+import com.duy.compass.location.model.Sunshine;
 import com.duy.compass.utils.DLog;
 
 import org.json.JSONArray;
@@ -22,28 +22,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * SyncAdapter
- */
 public class WeatherManager {
 
 
-    // Interval at which to sync with the weather, in seconds
-    // 60 seconds (1min) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 180;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
-
-
-    // These indices must match the projection
-    private static final int INDEX_WEATHER_ID = 0;
-    private static final int INDEX_MAX_TEMP = 1;
-    private static final int INDEX_MIN_TEMP = 2;
-    private static final int INDEX_SHORT_DESC = 3;
-
-    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
-    private static final int WEATHER_NOTIFICATION_ID = 3004;
     private static final String TAG = "WeatherManager";
-    private boolean DEBUG = true;
     private Context mContext;
 
     public WeatherManager(Context context) {
