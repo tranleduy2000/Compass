@@ -1,5 +1,8 @@
 ![Wallpaper](art/wall.png)
 
+## Get it in Google play
+https://play.google.com/store/apps/details?id=com.duy.compass
+
 ## Overview
 
 This application was developed to help people learn how to develop compass application.
