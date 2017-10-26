@@ -1,4 +1,4 @@
-package com.duy.compass.compass;
+package com.duy.compass.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

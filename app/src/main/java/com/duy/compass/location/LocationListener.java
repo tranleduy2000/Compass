@@ -11,10 +11,6 @@ import android.support.annotation.Nullable;
 import com.duy.compass.util.DLog;
 import com.duy.compass.weather.sync.FetchWeatherTask;
 
-import net.e175.klaus.solarpositioning.AzimuthZenithAngle;
-import net.e175.klaus.solarpositioning.DeltaT;
-import net.e175.klaus.solarpositioning.SPA;
-
 import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -65,23 +61,6 @@ public class LocationListener implements android.location.LocationListener {
             }
             mFetchWeatherTask = new FetchWeatherTask(mLocationValueListener, mContext);
             mFetchWeatherTask.execute(location);
-
-            final GregorianCalendar dateTime = new GregorianCalendar();
-            AzimuthZenithAngle position = SPA.calculateSolarPosition(
-                    dateTime,
-                    latitude, // latitude (degrees)
-                    longitude, // longitude (degrees)
-                    10, // elevation (m)
-                    DeltaT.estimate(dateTime), // delta T (s)
-                    1010, // avg. air pressure (hPa)
-                    11); // avg. air temperature (°C)
-            System.out.println("SPA: " + position);
-
-            GregorianCalendar[] res = SPA.calculateSunriseTransitSet(
-                    new GregorianCalendar(),
-                    70.978056, // latitude
-                    25.974722, // longitude
-                    69); // delta T
         }
     }
 

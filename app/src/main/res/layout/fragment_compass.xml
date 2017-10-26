@@ -33,7 +33,7 @@
         android:layout_weight="1"
         tools:context="com.duy.compass.MainActivity">
 
-        <com.duy.compass.compass.view.CompassView2
+        <com.duy.compass.view.CompassView2
             android:id="@+id/compass_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
@@ -184,7 +184,7 @@
             android:padding="8dp"
             android:text="..." />
 
-        <com.duy.compass.compass.view.AccelerometerView
+        <com.duy.compass.view.AccelerometerView
             android:id="@+id/accelerometer_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"

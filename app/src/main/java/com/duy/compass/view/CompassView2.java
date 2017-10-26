@@ -1,4 +1,4 @@
-package com.duy.compass.compass.view;
+package com.duy.compass.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.duy.compass.compass.CompassDrawer;
 import com.duy.compass.model.SensorValue;
 
 /**

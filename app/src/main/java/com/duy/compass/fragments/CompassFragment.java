@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duy.compass.R;
-import com.duy.compass.compass.view.AccelerometerView;
-import com.duy.compass.compass.view.CompassView2;
+import com.duy.compass.view.AccelerometerView;
+import com.duy.compass.view.CompassView2;
 import com.duy.compass.connect.NetworkStateReceiverListener;
 import com.duy.compass.location.LocationHelper;
 import com.duy.compass.model.Sunshine;
