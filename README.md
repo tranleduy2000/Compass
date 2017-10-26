@@ -15,4 +15,5 @@ For more information, please visit https://openweathermap.org
 ## Some screenshots
 
 ![](art/screenshot/Screenshot_20171021-225255_framed.png)
+
 ![](art/screenshot/Screenshot_20171021-225258_framed.png)
