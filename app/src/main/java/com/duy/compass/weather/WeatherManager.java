@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.duy.compass.weather.model.Sunshine;
-import com.duy.compass.weather.model.WeatherData;
+import com.duy.compass.weather.model.LocationData;
 import com.duy.compass.utils.DLog;
 
 import org.json.JSONArray;
@@ -143,13 +143,13 @@ public class WeatherManager {
     }
 
     @Nullable
-    public static WeatherData getWeatherData(Location location) {
+    public static LocationData getWeatherData(Location location, LocationData weatherData) {
         DLog.d(TAG, "getWeatherData() called with: location = [" + location + "]");
         try {
             double lat = location.getLatitude();
             double lon = location.getLongitude();
             String weatherForecast = getWeatherForecastData(lon, lat);
-            return getWeatherDataFromJson(weatherForecast);
+            return getWeatherDataFromJson(weatherForecast, weatherData);
         } catch (Exception e) {
             return null;
         }
@@ -162,33 +162,31 @@ public class WeatherManager {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private static WeatherData getWeatherDataFromJson(String forecastJsonStr)
+    private static LocationData getWeatherDataFromJson(String forecastJsonStr, LocationData locationData)
             throws JSONException {
         DLog.d(TAG, "getWeatherDataFromJson() called with: forecastJsonStr = [" + forecastJsonStr + "]");
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
         JSONObject mainData = forecastJson.getJSONObject("main");
 
-        WeatherData weatherData = new WeatherData();
-        weatherData.setTemp((float) mainData.getDouble("temp"));
-        weatherData.setTempMax((float) mainData.getDouble("temp_max"));
-        weatherData.setTempMin((float) mainData.getDouble("temp_min"));
-        weatherData.setHumidity((float) mainData.getDouble("humidity"));
-        weatherData.setPressure((float) mainData.getDouble("pressure"));
+        locationData.setTemp((float) mainData.getDouble("temp"));
+        locationData.setTempMax((float) mainData.getDouble("temp_max"));
+        locationData.setTempMin((float) mainData.getDouble("temp_min"));
+        locationData.setHumidity((float) mainData.getDouble("humidity"));
+        locationData.setPressure((float) mainData.getDouble("pressure"));
 
         JSONObject sysJson = forecastJson.getJSONObject("sys");
         long sunrise = sysJson.getLong("sunrise");
         long sunset = sysJson.getLong("sunset");
         Sunshine sunshine = new Sunshine(sunset * 1000, sunrise * 1000);
-        weatherData.setSunshine(sunshine);
-
+        locationData.setSunshine(sunshine);
 
         JSONArray weatherArray = forecastJson.getJSONArray("weather");
         JSONObject weatherObject = weatherArray.getJSONObject(0);
         int id = weatherObject.getInt("id");
-        weatherData.setId(id);
+        locationData.setId(id);
 
-        return weatherData;
+        return locationData;
     }
 
     public Context getContext() {

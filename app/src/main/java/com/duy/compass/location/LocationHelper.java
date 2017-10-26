@@ -3,7 +3,6 @@ package com.duy.compass.location;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -13,9 +12,9 @@ import android.widget.Toast;
 
 import com.duy.compass.R;
 import com.duy.compass.fragments.CompassFragment;
-import com.duy.compass.weather.model.WeatherData;
 import com.duy.compass.utils.DLog;
 import com.duy.compass.utils.Utility;
+import com.duy.compass.weather.model.LocationData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -33,7 +32,7 @@ public class LocationHelper {
     @Nullable
     private LocationListener mLocationListener;
     @Nullable
-    private LocationValueListener mLocationValueListener;
+    private LocationDataChangeListener mLocationValueListener;
 
     public LocationHelper(CompassFragment fragment) {
         this.mContext = fragment.getContext();
@@ -91,7 +90,7 @@ public class LocationHelper {
         }
     }
 
-    public void setLocationValueListener(LocationValueListener locationValueListener) {
+    public void setLocationValueListener(LocationDataChangeListener locationValueListener) {
         this.mLocationValueListener = locationValueListener;
         if (mLocationListener != null) {
             mLocationListener.setLocationValueListener(locationValueListener);
@@ -102,9 +101,7 @@ public class LocationHelper {
 
     }
 
-    public interface LocationValueListener {
-        void onUpdateLocation(Location location, @Nullable Address name);
-
-        void onReceiveWeatherData(@Nullable WeatherData weatherData);
+    public interface LocationDataChangeListener {
+        void onUpdateLocationData(@Nullable LocationData locationData);
     }
 }

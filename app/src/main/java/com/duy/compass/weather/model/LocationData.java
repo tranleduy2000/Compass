@@ -4,7 +4,9 @@ package com.duy.compass.weather.model;
  * Created by Duy on 10/21/2017.
  */
 
-public class WeatherData {
+public class LocationData {
+    private String addressLine;
+    private float longitude, latitude;
     private float temp;
     private float humidity;
     private float pressure;
@@ -12,17 +14,42 @@ public class WeatherData {
     private float tempMin;
     private Sunshine sunshine;
     private int id;
+    private double altitude;
 
-    public WeatherData() {
+    public LocationData() {
 
     }
 
-    public WeatherData(float temp, float humidity, float pressure, float tempMax, float tempMin) {
+    public LocationData(float temp, float humidity, float pressure, float tempMax, float tempMin) {
         this.temp = temp;
         this.humidity = humidity;
         this.pressure = pressure;
         this.tempMax = tempMax;
         this.tempMin = tempMin;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getAddressLine() {
+        return addressLine;
+    }
+
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
     }
 
     @Override
@@ -92,5 +119,13 @@ public class WeatherData {
 
     public void setTempMin(float tempMin) {
         this.tempMin = tempMin;
+    }
+
+    public double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
     }
 }

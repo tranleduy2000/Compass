@@ -3,8 +3,6 @@ package com.duy.compass.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -18,13 +16,13 @@ import android.widget.Toast;
 
 import com.duy.compass.R;
 import com.duy.compass.location.LocationHelper;
-import com.duy.compass.weather.model.Sunshine;
-import com.duy.compass.weather.model.WeatherData;
 import com.duy.compass.sensor.SensorListener;
-import com.duy.compass.utils.DLog;
-import com.duy.compass.utils.Utility;
 import com.duy.compass.sensor.view.AccelerometerView;
 import com.duy.compass.sensor.view.CompassView2;
+import com.duy.compass.utils.Utility;
+import com.duy.compass.weather.database.CompassPref;
+import com.duy.compass.weather.model.LocationData;
+import com.duy.compass.weather.model.Sunshine;
 
 import java.util.Locale;
 
@@ -35,7 +33,7 @@ import static com.duy.compass.utils.Utility.getDirectionText;
  */
 
 public class CompassFragment extends BaseFragment implements SensorListener.OnValueChangedListener,
-        LocationHelper.LocationValueListener{
+        LocationHelper.LocationDataChangeListener {
     public static final String TAG = "CompassFragment";
     private static final int REQUEST_ENABLE_GPS = 1002;
     private TextView mTxtAddress;
@@ -48,6 +46,7 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     private CompassView2 mCompassView;
     private AccelerometerView mAccelerometerView;
     private SensorListener mSensorListener;
+    private CompassPref mCompassPref;
 
     public static CompassFragment newInstance() {
 
@@ -124,39 +123,6 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
 
     }
 
-    @Override
-    public void onUpdateLocation(@Nullable Location location, Address address) {
-        if (address != null) {
-            mTxtAddress.setText(address.getAddressLine(0));
-            float longitude = (float) address.getLongitude();
-            float latitude = (float) address.getLatitude();
-            String lonStr = Utility.formatDms(longitude) + " " + getDirectionText(longitude);
-            String latStr = Utility.formatDms(latitude) + " " + getDirectionText(latitude);
-            mTxtLonLat.setText(String.format("%s\n%s", lonStr, latStr));
-        }
-        if (location != null) {
-            double altitude = location.getAltitude();
-            mTxtAltitude.setText(String.format(Locale.US, "%d m", (long) altitude));
-            float speed = location.getSpeed();
-        }
-    }
-
-    @Override
-    public void onReceiveWeatherData(@Nullable WeatherData weatherData) {
-        DLog.d(TAG, "onReceiveWeatherData() called with: weatherData = [" + weatherData + "]");
-        if (weatherData != null) {
-            Sunshine sunshine = weatherData.getSunshine();
-            if (sunshine != null) {
-                mTxtSunrise.setText(sunshine.getReadableSunriseTime());
-                mTxtSunset.setText(sunshine.getReadableSunsetTime());
-            }
-            int resId = Utility.getIconResourceForWeatherCondition(weatherData.getId());
-            if (resId != -1) mImgWeather.setImageResource(resId);
-            mTxtPressure.setText(String.format(Locale.US, "%s hPa", weatherData.getPressure()));
-            mTxtHumidity.setText(String.format(Locale.US, "%s %%", weatherData.getHumidity()));
-            mTxtTemp.setText(Utility.formatTemperature(getContext(), weatherData.getTemp()));
-        }
-    }
 
     @Override
     public void onRotationChanged(float azimuth, float roll, float pitch) {
@@ -176,7 +142,6 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
         return R.layout.fragment_compass;
     }
 
-
     //https://stackoverflow.com/questions/39336461/how-can-i-enable-or-disable-the-gps-programmatically-on-android-6-x
     private void buildAlertMessageNoGps() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -193,19 +158,54 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
                         dialog.cancel();
                     }
                 });
-         AlertDialog alert = builder.create();
+        AlertDialog alert = builder.create();
         alert.show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        DLog.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-
         switch (requestCode) {
             case REQUEST_ENABLE_GPS:
                 mLocationHelper.onCreate();
                 break;
+        }
+    }
+
+
+    @Override
+    public void onUpdateLocationData(@Nullable LocationData locationData) {
+        if (locationData == null) {
+            locationData = mCompassPref.getLastedLocationData();
+        }
+        if (locationData != null) {
+            //sunshine
+            Sunshine sunshine = locationData.getSunshine();
+            if (sunshine != null) {
+                mTxtSunrise.setText(sunshine.getReadableSunriseTime());
+                mTxtSunset.setText(sunshine.getReadableSunsetTime());
+            }
+
+            //weather
+            int resId = Utility.getIconResourceForWeatherCondition(locationData.getId());
+            if (resId != -1) mImgWeather.setImageResource(resId);
+            mTxtPressure.setText(String.format(Locale.US, "%s hPa", locationData.getPressure()));
+            mTxtHumidity.setText(String.format(Locale.US, "%s %%", locationData.getHumidity()));
+            mTxtTemp.setText(Utility.formatTemperature(getContext(), locationData.getTemp()));
+
+            //address
+            mTxtAddress.setText(locationData.getAddressLine());
+
+            //location
+            float longitude = (float) locationData.getLongitude();
+            float latitude = (float) locationData.getLatitude();
+            String lonStr = Utility.formatDms(longitude) + " " + getDirectionText(longitude);
+            String latStr = Utility.formatDms(latitude) + " " + getDirectionText(latitude);
+            mTxtLonLat.setText(String.format("%s\n%s", lonStr, latStr));
+
+            //altitude
+            double altitude = locationData.getAltitude();
+            mTxtAltitude.setText(String.format(Locale.US, "%d m", (long) altitude));
         }
     }
 }
