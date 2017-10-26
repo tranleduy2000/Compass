@@ -1,4 +1,4 @@
-package com.duy.compass.view;
+package com.duy.compass.sensor.drawer;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -17,15 +17,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
-import com.duy.compass.util.DLog;
+import com.duy.compass.utils.DLog;
 import com.duy.compass.R;
-import com.duy.compass.model.SensorValue;
-import com.duy.compass.model.Sunshine;
-import com.duy.compass.view.TypefaceManager;
+import com.duy.compass.sensor.model.SensorValue;
+import com.duy.compass.weather.model.Sunshine;
+import com.duy.compass.utils.TypefaceManager;
 
 import java.util.Locale;
 
-import static com.duy.compass.util.Utility.getDirectionText;
+import static com.duy.compass.utils.Utility.getDirectionText;
 
 public class CompassDrawer {
     private static final String TAG = "CanvasHelper";

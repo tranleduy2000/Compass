@@ -17,26 +17,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duy.compass.R;
-import com.duy.compass.view.AccelerometerView;
-import com.duy.compass.view.CompassView2;
-import com.duy.compass.connect.NetworkStateReceiverListener;
 import com.duy.compass.location.LocationHelper;
-import com.duy.compass.model.Sunshine;
-import com.duy.compass.model.WeatherData;
+import com.duy.compass.weather.model.Sunshine;
+import com.duy.compass.weather.model.WeatherData;
 import com.duy.compass.sensor.SensorListener;
-import com.duy.compass.util.DLog;
-import com.duy.compass.util.Utility;
+import com.duy.compass.utils.DLog;
+import com.duy.compass.utils.Utility;
+import com.duy.compass.sensor.view.AccelerometerView;
+import com.duy.compass.sensor.view.CompassView2;
 
 import java.util.Locale;
 
-import static com.duy.compass.util.Utility.getDirectionText;
+import static com.duy.compass.utils.Utility.getDirectionText;
 
 /**
  * Created by Duy on 10/17/2017.
  */
 
 public class CompassFragment extends BaseFragment implements SensorListener.OnValueChangedListener,
-        LocationHelper.LocationValueListener, NetworkStateReceiverListener {
+        LocationHelper.LocationValueListener{
     public static final String TAG = "CompassFragment";
     private static final int REQUEST_ENABLE_GPS = 1002;
     private TextView mTxtAddress;
@@ -175,16 +174,6 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
     @Override
     public int getLayout() {
         return R.layout.fragment_compass;
-    }
-
-    @Override
-    public void networkAvailable() {
-        mLocationHelper.onCreate();
-    }
-
-    @Override
-    public void networkUnavailable() {
-        mLocationHelper.networkUnavailable();
     }
 
 

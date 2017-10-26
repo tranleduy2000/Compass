@@ -1,4 +1,4 @@
-package com.duy.compass.weather.sync;
+package com.duy.compass.weather;
 
 import android.content.Context;
 import android.location.Location;
@@ -7,10 +7,9 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.duy.compass.database.DatabaseHelper;
-import com.duy.compass.model.Sunshine;
-import com.duy.compass.model.WeatherData;
-import com.duy.compass.util.DLog;
+import com.duy.compass.weather.model.Sunshine;
+import com.duy.compass.weather.model.WeatherData;
+import com.duy.compass.utils.DLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +44,6 @@ public class WeatherManager {
     private static final int WEATHER_NOTIFICATION_ID = 3004;
     private static final String TAG = "WeatherManager";
     private boolean DEBUG = true;
-    private DatabaseHelper mDatabaseHelper;
     private Context mContext;
 
     public WeatherManager(Context context) {

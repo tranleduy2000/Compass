@@ -1,11 +1,11 @@
-package com.duy.compass.weather.sync;
+package com.duy.compass.weather;
 
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
 
 import com.duy.compass.location.LocationHelper;
-import com.duy.compass.model.WeatherData;
+import com.duy.compass.weather.model.WeatherData;
 
 /**
  * Created by Duy on 10/16/2017.

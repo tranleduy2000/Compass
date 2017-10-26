@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
+import com.duy.compass.utils.TypefaceManager;
+
 /**
  * Created by Duy on 10/20/2017.
  */

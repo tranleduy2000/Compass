@@ -1,4 +1,4 @@
-package com.duy.compass.view;
+package com.duy.compass.sensor.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.duy.compass.model.SensorValue;
+import com.duy.compass.sensor.model.SensorValue;
+import com.duy.compass.sensor.drawer.AccelerometerDrawer;
 
 /**
  * Created by Duy on 10/20/2017.

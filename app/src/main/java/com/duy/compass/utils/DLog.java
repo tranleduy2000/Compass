@@ -1,4 +1,4 @@
-package com.duy.compass.util;
+package com.duy.compass.utils;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.duy.compass.view;
+package com.duy.compass.sensor.drawer;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,8 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import com.duy.compass.R;
-import com.duy.compass.model.SensorValue;
-import com.duy.compass.util.DLog;
+import com.duy.compass.sensor.model.SensorValue;
+import com.duy.compass.utils.DLog;
 
 /**
  * Created by Duy on 10/20/2017.

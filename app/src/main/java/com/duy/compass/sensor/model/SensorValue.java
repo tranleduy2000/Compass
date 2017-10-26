@@ -1,4 +1,4 @@
-package com.duy.compass.model;
+package com.duy.compass.sensor.model;
 
 /**
  * Created by Duy on 10/16/2017.

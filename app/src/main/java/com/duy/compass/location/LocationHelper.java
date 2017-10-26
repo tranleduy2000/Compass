@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import com.duy.compass.R;
 import com.duy.compass.fragments.CompassFragment;
-import com.duy.compass.model.WeatherData;
-import com.duy.compass.util.DLog;
-import com.duy.compass.util.Utility;
+import com.duy.compass.weather.model.WeatherData;
+import com.duy.compass.utils.DLog;
+import com.duy.compass.utils.Utility;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 

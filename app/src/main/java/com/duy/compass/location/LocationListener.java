@@ -8,11 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.duy.compass.util.DLog;
-import com.duy.compass.weather.sync.FetchWeatherTask;
+import com.duy.compass.utils.DLog;
+import com.duy.compass.weather.FetchWeatherTask;
 
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 

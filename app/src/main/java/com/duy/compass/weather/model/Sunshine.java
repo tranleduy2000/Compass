@@ -1,4 +1,4 @@
-package com.duy.compass.model;
+package com.duy.compass.weather.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

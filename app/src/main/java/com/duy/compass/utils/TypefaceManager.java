@@ -1,4 +1,4 @@
-package com.duy.compass.view;
+package com.duy.compass.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
