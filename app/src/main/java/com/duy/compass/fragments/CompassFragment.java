@@ -79,6 +79,8 @@ public class CompassFragment extends BaseFragment implements SensorListener.OnVa
                 buildAlertMessageNoGps();
             }
         }
+
+        onUpdateLocationData(null);
     }
 
     private void bindView() {
